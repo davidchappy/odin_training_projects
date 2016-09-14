@@ -5,7 +5,6 @@ class Game
 
   def self.start
     set_players
-    set_symbols
     Board.start_board
     Board.print_start(@player1, @player2)
     Board.print_board
@@ -13,15 +12,12 @@ class Game
     @current_player.take_turn
   end
 
-  def self.set_symbols
-    @@symbols = ["x", "o"]
-    @player1.symbol = @@symbols.delete(@@symbols.sample)
-    @player2.symbol = @@symbols.first
-  end
-
   def self.set_players
     @player1 = Player.create(1, "Fred")
     @player2 = Player.create(2, "Ricky")
+    @@symbols = ["x", "o"]
+    @player1.symbol = @@symbols.delete(@@symbols.sample)
+    @player2.symbol = @@symbols.first
   end
 
   def self.process_turn(choice)
@@ -52,8 +48,6 @@ class Game
   def self.current_player
     @current_player
   end
-
-  private
 
   def self.validate_choice(choice)
     valid_choices = [["a", "b", "c"],[1,2,3]]
