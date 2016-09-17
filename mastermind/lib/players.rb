@@ -1,17 +1,24 @@
 class Player
 
+  attr_reader :code, :name
+  attr_accessor :score
+
+  def initialize(name)
+    @score ||= 0
+    @name = name
+    @code ||= ""
+  end
+
 end
 
 
 class Ai < Player
 
-  attr_reader :code, :name
-  attr_accessor :score
+  attr_accessor :correct_guesses
 
   def initialize(name)
-    @code = generate_code
-    @score = 0
-    @name = name
+    super
+    @correct_guesses ||= [nil,nil,nil,nil]
   end
 
   def generate_code
@@ -22,17 +29,22 @@ class Ai < Player
     return @code
   end
 
+  def guess
+    guess = []
+    p @correct_guesses
+    @correct_guesses.each_with_index do |number, index| 
+      if number == nil
+        guess[index] = rand(1..6)
+      else
+        guess[index] = @correct_guesses[index]
+      end
+    end
+    guess.join("")
+  end
+
 end
 
 class Human < Player
-
-  attr_reader :name
-  attr_accessor :score
-
-  def initialize(name)
-    @score = 0
-    @name = name
-  end
 
   def self.create(player_name=nil)
     if player_name == nil
@@ -40,18 +52,26 @@ class Human < Player
       player_name = gets.chomp
       puts "Player: " + player_name
     end
-    Board.print_divider
     self.new(player_name)
   end
 
   def guess
     print "Your turn! Choose 4 numbers from 1 to 6: "
-    choice = gets.chomp
-    unless choice.length == 4 && choice.match(/^[1-6]+$/)
-      puts "Please choose 4 numbers between 1 and 6."
-      guess
+    request_input
+  end
+
+  def generate_code
+    print "Please type a 4-digit secret code that the computer will guess (use only 1-6): "
+    request_input
+  end
+
+  def request_input
+    response = gets.chomp
+    while response.length != 4 || !response.match(/^[1-6]+$/)
+      print "Please choose 4 numbers between 1 and 6."
+      response = gets.chomp
     end
-    Game.process_turn(choice)
+    response
   end
 
 end

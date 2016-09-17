@@ -2,26 +2,22 @@ class Board
 
   attr_accessor :answers, :feedback
 
-  def self.answers
-    @answers
-  end
-
-  def self.feedback
-    @feedback
+  def initialize
+    @answers = []
+    @feedback = []
   end
 
   def self.startup
-    @answers = []
-    @feedback = []
-    puts "Mastermind! Try to guess the 4-digit code (#s 1-6) in 12 turns or less."
+    puts "Match No. #{Game.match_count}"
+    self.new
   end
 
-  def self.print_divider
+  def print_divider
     puts "--------"
   end
 
-  def self.print_answers
-    puts "Your answers:"
+  def print_answers
+    puts "All answers:"
     @answers.each_with_index do |answer, index|
       i = index + 1
       print i.to_s + ": " + answer 
@@ -30,7 +26,12 @@ class Board
     print_divider
   end
 
-  def self.print_feedback(feedback, codemaker)
+  def notify_guess(guess)
+    print "The computer guessed #{guess}. Press any key to continue."
+    gets.chomp
+  end
+
+  def print_feedback(feedback, codemaker)
     @feedback << feedback
     print_divider
     puts "#{codemaker.name}'s answer: "
@@ -40,11 +41,16 @@ class Board
     print_divider
   end
 
-  def self.print_result(winner, ai_score, hum_score)
+  def print_match_result(codemaker, codebreaker, current_winner=false)
     print_divider
-    puts "Winner: #{winner.name}!"
-    puts "Ai: #{ai_score}"
-    puts "You: #{hum_score}"
+    if current_winner
+      puts "Current winner: #{current_winner}"
+    else
+      puts "Current Score"
+    end
+    puts "#{codebreaker.name}: #{codebreaker.score}"
+    puts "#{codemaker.name}: #{codemaker.score}"
+    print_divider
   end
 
 end
