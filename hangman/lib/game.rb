@@ -1,22 +1,30 @@
 class Game
 
-  attr_reader :current_turn, :turns_remaining, :word, :current_match, :turn_limit
+  attr_reader :current_turn, :word, :current_match, :turn_limit, :player
   attr_accessor :player_guesses
 
-  def self.start(saved_game=false)
-    # if load
-      # if exists, load file using saves object, else throw error and start new game
-      # update saved_game   
-    # end
-    Game.new(saved_game)
-  end
-
   def initialize(saved_game=false)
-    unless saved_game
-      @current_match = self
-      @player ||= Player.new(@current_match)
+    @current_match = self
+    @player = Player.new(@current_match)
+    @board = Board.new(@current_match)
+    @saver = Saver.new(@current_match)
+    if saved_game
+      @board.display_saves(@saver.saves)
+      print "Type the number of the game you'd like to load: "
+      id = gets.chomp
+      while id.match(/ˆ[0-9]+$/) == false
+        print "Please type a number: "
+        id = gets.chomp
+      end
+      loaded_game = @saver.load(id)
+      state = loaded_game[:state]
+      @word = state[:word]
+      @player_guesses = state[:player_guesses]
+      @current_turn = state[:current_turn]
+      process_turn(true)
+    else
       @word ||= get_word("dictionary.txt")
-      p @word
+      # p @word
       @player_guesses ||= {
         letters: [], 
         misses: []
@@ -24,17 +32,20 @@ class Game
       if @player_guesses[:letters] == [] 
         get_blanks
       end
-      @board ||= Board.new(@current_match)
-      @current_turn ||= 1
-    else
-      # load variables from saved state
+      @current_turn ||= 0
+      process_turn
     end
-
-    process_turn
   end
 
-  def process_turn
+  def process_turn(load=false)
+    puts "The word has #{@word.length} letters."
+    if load
+       @board.update
+    else
+      puts "#{$turn_limit - @current_turn} turns left."
+    end
     while @current_turn <= $turn_limit
+      @current_turn += 1
       guess_array = @player.guess
       guess = guess_array[0]
       guess_type = guess_array[1]
@@ -47,8 +58,9 @@ class Game
         @board.match_result(true)
       end
       @board.update
-      @current_turn += 1
+      @saver.save if @player.save?
     end
+    puts "The word was '#{@word}'."
     @board.match_result
     start_again
   end
@@ -91,7 +103,12 @@ class Game
 
   def get_word(file)
     lines = File.readlines(file)
-    word = lines[rand(lines.length)].chomp
+    words = []
+    lines.each do |line|
+      next if line.split("").length > $word_limit
+      words << line
+    end
+    word = words[rand(words.length)].chomp.downcase
   end
 
   def get_blanks

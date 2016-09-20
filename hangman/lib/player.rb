@@ -5,7 +5,7 @@ class Player
   end
 
   def guess
-    print "Guess a (l)etter or a (w)ord? "
+    print "Guess a (w)ord or a (l)etter (any other key)? "
     response = gets.chomp.downcase
     case response
     when "w"
@@ -22,7 +22,7 @@ class Player
     if response.length > 1
       puts "Your choice (truncated): #{response[0]}"
     end
-    while @game.player_guesses[:letters].include?(response[0])
+    while @game.player_guesses[:letters].include?(response[0]) || @game.player_guesses[:misses].include?(response[0])
       puts "You've already guessed that — try again."
       response = request_input 
     end
@@ -41,13 +41,24 @@ class Player
   end
 
   def request_input
-    print "Please type your guess: "
+    print "Please type your answer: "
     response = gets.chomp.downcase
     while !response.match(/^[a-zA-Z]+$/)
       print "Please type only letters a-z."
       response = gets.chomp.downcase
     end
     response
+  end
+
+  def save?
+    print "Want to save your game? (y/N) "
+    response = gets.chomp.downcase
+    case response
+    when "y"
+      return true
+    else
+      return false
+    end
   end
 
 end
