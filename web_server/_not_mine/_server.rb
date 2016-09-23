@@ -4,9 +4,9 @@ require 'json'
 server = TCPServer.open(2000)  
 loop {     
   Thread.start(server.accept) do |client|        
-
     request_message = client.read_nonblock(256)
     p request_message
+    
     request, body = request_message.split("\r\n\r\n", 2)
     file = request.match(/(\w+\/)*\w+\.\w+/)[0]
 

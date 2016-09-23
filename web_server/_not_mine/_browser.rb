@@ -21,10 +21,8 @@ elsif request_type == "POST"
   request = "POST #{path} HTTP/1.0\nContent-Length: #{content.size}\r\n\r\n#{content}"
 end
 
-
 socket = TCPSocket.open(host,port)  
 socket.print(request)               
 response = socket.read              
-
 headers,body = response.split("\r\n\r\n", 2) 
 print body         
