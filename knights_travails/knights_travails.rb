@@ -1,12 +1,10 @@
-require './binary_tree.rb'
-
+# Overarching "game" class to hold board and piece info
 class Chess
 
-  attr_reader :knight, :board
+  attr_reader :knight
 
   def initialize
     @knight = Knight.new([3,3])
-    @board = Chess.squares
   end
 
   def self.squares
@@ -31,6 +29,7 @@ class Chess
 
 end
 
+# Object that represents a square, useful for establishing path relationships
 class Placement
 
   attr_accessor :square, :parent, :next_placements
@@ -63,6 +62,7 @@ class Knight
     @current_position
   end
 
+  # Helper that takes a Placement object and returns array of Placements that can be moved to
   def get_possible_moves_for(position)
     possible = []
     x = position.square[0]
@@ -83,10 +83,11 @@ class Knight
     possible
   end
 
+  # Method to find shortest route
   def calculate_moves(destination)
     path = []
     queue = [@current_position]
-    # thanks to https://github.com/thomasjnoe/knight-moves/blob/master/knight_moves.rb for help with this concept
+    # thanks to https://github.com/thomasjnoe/knight-moves for help with this visited concept
     visited = []
 
     return "You're already there" if @current_position.square == destination
@@ -121,8 +122,4 @@ class Knight
 end
 
 game = Chess.new
-# p game.knight.current_position
-# p game.knight.current_position.next_placements
-# game.knight.move([2,2])
-# p game.knight.current_position.next_placements
 game.knight.calculate_moves([4,3])
