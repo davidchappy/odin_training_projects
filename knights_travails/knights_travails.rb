@@ -5,7 +5,8 @@ class Chess
   attr_reader :knight, :board
 
   def initialize
-    @knight = Knight.new([1,0])
+    @knight = Knight.new([3,3])
+    @board = Chess.squares
   end
 
   def self.squares
@@ -21,66 +22,107 @@ class Chess
     ]
   end
 
-end
-
-class Knight
-
-  attr_reader :possible_moves
-  attr_reader :current_position
-
-  def initialize(starting_position)
-    @current_position = starting_position
-    @possible_moves = get_possible_moves
-  end
-
-  def move(destination)
-    if @possible_moves.include?(destination)
-      @current_position = destination
-      get_possible_moves
-    else 
-      return "Can't move there"
-    end
-    @current_position
-  end
-
-  def get_possible_moves
-    @possible_moves = []
-    x = @current_position[0]
-    y = @current_position[1]
-    moves = [
-      [x-1,y-2], 
-      [x-1,y+2], 
-      [x-2,y-1], 
-      [x-2,y+1], 
-      [x+1,y+2], 
-      [x+1,y-2], 
-      [x+2,y-1], 
-      [x+2,y+1]
-    ]
-
-    moves.each do |move|
-      @possible_moves << move unless not_on_board?(move)
-    end  
-    @possible_moves
-  end
-
-  def not_on_board?(square)
+  def self.not_on_board?(placement)
     Chess.squares.each do |row|
-      return false if row.include?(square)
+      return false if row.include?(placement.square)
     end
     return true
   end
 
 end
 
+class Placement
+
+  attr_accessor :square, :parent, :next_placements
+
+  def initialize(square, parent=nil, next_placements=nil)
+    @square = square
+    @parent = parent
+    @next_placements = next_placements
+  end
+
+end
+
+class Knight
+
+  attr_accessor :current_position
+
+  def initialize(starting_position)
+    @current_position = Placement.new(starting_position)
+    @current_position.next_placements = get_possible_moves_for(@current_position)
+  end
+
+  def move(destination, start=@current_position)
+    possible = @current_position.next_placements.collect { |p| p.square }
+    if possible.include?(destination)
+      @current_position = @current_position.next_placements.find { |e| e.square == destination }
+      @current_position.next_placements = get_possible_moves_for(@current_position) 
+    else 
+      puts "Can't move there"
+    end
+    @current_position
+  end
+
+  def get_possible_moves_for(position)
+    possible = []
+    x = position.square[0]
+    y = position.square[1]
+    moves = [
+      Placement.new([x-1,y-2], position), 
+      Placement.new([x-1,y+2], position), 
+      Placement.new([x-2,y-1], position), 
+      Placement.new([x-2,y+1], position), 
+      Placement.new([x+1,y+2], position), 
+      Placement.new([x+1,y-2], position), 
+      Placement.new([x+2,y-1], position), 
+      Placement.new([x+2,y+1], position)
+    ]
+    moves.each do |move|
+      possible << move unless Chess.not_on_board?(move)
+    end
+    possible
+  end
+
+  def calculate_moves(destination)
+    path = []
+    queue = [@current_position]
+    # thanks to https://github.com/thomasjnoe/knight-moves/blob/master/knight_moves.rb for help with this concept
+    visited = []
+
+    return "You're already there" if @current_position.square == destination
+
+    until queue.empty? 
+      current_move = queue.shift
+      visited << current_move
+
+      if current_move.square == destination
+        path_move = current_move
+        until path_move == @current_position
+          path.unshift(path_move.square)
+          path_move = path_move.parent
+        end
+        path.unshift(@current_position.square)
+        puts "You made it in #{(path.length - 1).to_s} moves. Here's your path: "
+        path.each do |s|
+          p s
+        end
+        return path
+      end
+
+      current_move.next_placements = get_possible_moves_for(current_move).select { |move| !visited.include?(move) } 
+
+      current_move.next_placements.each do |placement|
+        queue << placement
+        visited << placement
+      end
+    end
+  end
+
+end
+
 game = Chess.new
-p game.knight.possible_moves
-game.knight.move([2,2])
-p game.knight.possible_moves
-
-
-# tree = Node.build_tree(board.squares)
-
-# p game
-# p board.squares[3][3]
-# p tree
+# p game.knight.current_position
+# p game.knight.current_position.next_placements
+# game.knight.move([2,2])
+# p game.knight.current_position.next_placements
+game.knight.calculate_moves([4,3])
