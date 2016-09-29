@@ -155,3 +155,5 @@ h = {"one" => 1, "two" => 2, "three" => 3}
 
 # multiply_els
 # p multiply_els(a)
+
+# a.my_each {|e| print e.to_s }
