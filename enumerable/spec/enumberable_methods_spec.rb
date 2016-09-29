@@ -106,10 +106,19 @@ describe Enumerable do
 
   describe "#my_count" do
 
-    # it "yields to a block" do
-    #   array1 = [1,3,2,4]
-    #   expect { |b| array1.my_none?(&b) }.to yield_control
-    # end
+    it "returns a collection's count without an argument or block" do
+      expect([1,3,2,4].my_count).to eq(10)
+    end
+
+    it "returns a collection's count where argument provided is matched" do
+      array1 = [1,3,2,4]
+      expect(array1.my_count(3)).to eq(1)
+    end
+
+    it "returns a collection's count where block's return value is matched" do
+      array1 = [1,3,2,4]
+      expect(array1.my_count{|e| e < 3 }).to eq(2)
+    end
 
   end
 
