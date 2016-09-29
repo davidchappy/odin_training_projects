@@ -1,3 +1,4 @@
+
 class Node
   attr_reader :value
   attr_accessor :parent, :left, :right
