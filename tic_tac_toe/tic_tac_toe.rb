@@ -221,4 +221,4 @@ class Player
 
 end
 
-Game.start
+# Game.start
