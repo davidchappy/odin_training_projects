@@ -1,8 +1,5 @@
 class Game 
 
-  attr_reader :player1, :player2
-  attr_accessor :current_player
-
   def self.start
     set_players
     Board.start_board
@@ -10,6 +7,22 @@ class Game
     Board.print_board
     set_starting_player
     @current_player.take_turn
+  end
+
+  def self.current_player=player
+    @current_player = player
+  end
+
+  def self.board=board
+    @board = board
+  end
+
+  def self.player1
+    @player1
+  end
+
+  def self.player2
+    @player2
   end
 
   def self.set_players
@@ -38,6 +51,7 @@ class Game
       @current_player = players[0]
     end
     puts @current_player.name + "\'s turn."
+    @current_player
   end
 
   def self.set_starting_player
@@ -47,6 +61,10 @@ class Game
 
   def self.current_player
     @current_player
+  end
+
+  def self.current_player=current_player
+    @current_player = current_player
   end
 
   def self.validate_choice(choice)
@@ -65,12 +83,11 @@ class Game
     end
   end
 
-  def self.check_for_game_over
-    case 
-    when Board.full?
-      declare_game_end("draw")
-    when Board.row_victory? || Board.column_victory? || Board.diagonal_victory?
+  def self.check_for_game_over 
+    if Board.row_victory? || Board.column_victory? || Board.diagonal_victory?
       declare_game_end
+    elsif Board.full?
+      declare_game_end("draw")
     end
   end
 
@@ -82,7 +99,7 @@ class Game
     end
     Board.print_divider
     print "Play again? (Y/n): "
-    choice = gets.chomp
+    choice = $stdin.gets.chomp
     Board.print_divider
     if choice.downcase == "n"
       exit
@@ -96,7 +113,6 @@ end
 
 class Board
 
-  attr_accessor :board
   attr_reader :blank_spot
   
   def self.start_board
@@ -110,10 +126,15 @@ class Board
                 c1: @blank_spot, 
                 c2: @blank_spot, 
                 c3: @blank_spot }
+    @board
   end
 
   def self.board
     @board
+  end
+
+  def self.board=board
+    @board = board
   end
 
   def self.print_board
@@ -141,7 +162,7 @@ class Board
   end
 
   def self.full?
-    board.all? do |k,v|
+    @board.all? do |k,v|
       v != @blank_spot
     end
   end
@@ -204,21 +225,28 @@ class Player
   def self.create(player_number, player_name=nil)
     if player_name == nil
       print "Player " + player_number + ": "
-      player_name = gets.chomp
+      player_name = $stdin.gets.chomp
     end
     self.new(player_name)
   end
 
   def initialize(player_name)
     @name = player_name
+    @symbol = nil
   end
 
   def take_turn
     print "Choose a row (ex: A) and a column (ex: 1): "
-    choice = gets.chomp.downcase.slice(0..1)
+    choice = $stdin.gets.chomp.downcase.slice(0..1)
     Game.process_turn(choice)
   end
 
 end
 
-# Game.start
+if !ARGV[0].nil? && ARGV[0].downcase == "start"
+  Game.start
+  ARGV.clear
+  STDOUT.flush
+elsif !ARGV[0].nil?
+  puts "Please include 'start' like this: 'ruby [file-name] start'"
+end
