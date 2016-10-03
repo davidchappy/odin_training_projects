@@ -71,12 +71,8 @@ class Game
     # set up the answer and code as arrays for comparison
     @answer_array = answer.split("")
     @code_array = code.split("")
-
-    # return feedback
-    bagels = count_pegs("bagels")
-    picos = count_pegs("picos")
-    fermis = count_pegs("fermis")    
-    feedback = {bagels: bagels, picos: picos, fermis: fermis}
+  
+    feedback = count_pegs
     @board.print_feedback(feedback, @codemaker)
 
     if answer == code
@@ -85,52 +81,50 @@ class Game
     end
   end
 
-  def count_pegs(pegs)
-    result = 0
+  def count_pegs
+    results = {bagels: 0, picos: 0, fermis: 0}
+    pegs_counted = 0
+    duplicates = []
 
-    case pegs
-    when "bagels"
-      @answer_array.each_with_index do |number, index| 
-        if @code_array.include?(number) && @answer_array[index] == @code_array[index]
-          # remove bagels from answer and code for the remaining two pegcounts (picos/fermis)
-          @answer_array[index] = nil
-          @code_array[index] = nil
-          result += 1
+    # get counts of each digit in code and answer arrays
+    code_counts = @code_array.inject(Hash.new(0)) { |total, e| total[e] += 1 ;total}
+    answer_counts = @answer_array.inject(Hash.new(0)) { |total, e| total[e] += 1 ;total}
 
-          if @codebreaker.is_a?(Ai) 
-            puts "Yep I'm ai"
-            @codebreaker.correct_guesses[index] = number
-            p @codebreaker.correct_guesses
+    # operate on @answer_array until 4 pegs have been counted
+    until pegs_counted == 4
+      @answer_array.each_with_index do |number, index|
+        if @code_array.include?(number)
+          if @code_array[index] == number  # add bagels
+            pegs_counted += 1
+            results[:bagels] += 1
+            if @codebreaker.is_a?(Ai) 
+              @codebreaker.correct_guesses[index] = number
+            end
+          else  # add picos  
+            results[:picos] += 1 
+            pegs_counted += 1 
+            if answer_counts[number] > code_counts[number]
+              duplicates << number unless duplicates.include?(number)
+            end
           end
-          
-        end
-      end
-    when "picos"
-      # get counts of each digit in code and answer (nil where bagels were)
-      code_counts = @code_array.inject(Hash.new(0)) { |total, e| total[e] += 1 ;total}
-      answer_counts = @answer_array.inject(Hash.new(0)) { |total, e| total[e] += 1 ;total}
-      answer_counts.each do |number,value|
-        if number != nil && code_counts.has_key?(number)
-          result += 1
-          code_counts[number] -= 1
-          answer_counts[number] -= 1
-          if code_counts[number] == 0
-            code_counts[number] = nil
-          end
-          if answer_counts[number] == 0
-            answer_counts[number] = nil
-          end
-        end
-      end
-    when "fermis"
-      @answer_array.each do |number|
-        unless number == nil || @code_array.include?(number)
-          result += 1
+        else # add fermis
+          pegs_counted += 1
+          results[:fermis] += 1
         end
       end
     end
-    
-    return result
+
+    # compensate for picos that were overcounted 
+    unless duplicates.nil?
+      duplicates.each do |duplicate|
+        code_counts[duplicate] ||= 0
+        difference = answer_counts[duplicate] - code_counts[duplicate]
+        results[:picos] -= difference
+        results[:fermis] += difference
+      end
+    end
+        
+    return results
   end
 
   def end_match

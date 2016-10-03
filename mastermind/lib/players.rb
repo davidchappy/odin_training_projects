@@ -25,13 +25,11 @@ class Ai < Player
     code = []
     4.times { |r| code << rand(1..6) }
     @code = code.join("") 
-    # p "Code: " + @code
     return @code
   end
 
   def guess
     guess = []
-    p @correct_guesses
     @correct_guesses.each_with_index do |number, index| 
       if number == nil
         guess[index] = rand(1..6)
