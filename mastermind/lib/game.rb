@@ -57,6 +57,7 @@ class Game
       result = process_answer(guess)
       if result == "Correct"
         @board.print_answers
+        puts "The answer was correct!".upcase!
         end_match
       end
       @board.print_answers
@@ -76,7 +77,6 @@ class Game
     @board.print_feedback(feedback, @codemaker)
 
     if answer == code
-      puts "The answer was correct!"
       return "Correct"
     end
   end
