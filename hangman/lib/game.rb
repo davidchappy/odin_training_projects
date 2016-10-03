@@ -56,18 +56,17 @@ class Game
       end
       if @player_guesses[:letters].join("") == @word
         @board.match_result(true)
+      elsif @current_turn == $turn_limit
+        @board.match_result(false)
       end
       @board.update
       @saver.save if @player.save?
     end
-    puts "The word was '#{@word}'."
-    @board.match_result
-    start_again
   end
 
   def process_letter(letter)
     if @word.split("").include?(letter)
-      puts "Good job!"
+      puts "Good job - you got a letter!"
       @word.split("").each_with_index do |l,index|
         if l == letter
           @player_guesses[:letters][index] = letter
@@ -85,7 +84,6 @@ class Game
     else
       bracketed_word = "(" + word + ")"
       @player_guesses[:misses] << bracketed_word
-      puts "Sorry, that's not the right word." 
     end
   end
 
@@ -97,7 +95,7 @@ class Game
     if choice.downcase == "n"
       exit
     else
-      Game.start
+      welcome
     end
   end
 

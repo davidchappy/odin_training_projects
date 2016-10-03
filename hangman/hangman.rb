@@ -6,8 +6,8 @@ require "./lib/game.rb"
 require "./lib/saver.rb"
 
 $load_from_file = false
-$turn_limit = 6
-$word_limit = 10
+$turn_limit = 8
+$word_limit = 8
 $save_path = "saves/"
 Dir.mkdir($save_path) unless Dir.exists?($save_path)
 
@@ -18,7 +18,7 @@ def welcome
   choice = gets.chomp.downcase
   case choice
   when "l"
-    $load_from_file = true
+    Game.new(true)
   when "q"
     exit
   else
@@ -26,4 +26,4 @@ def welcome
 end
 
 welcome
-Game.new($load_from_file)
+Game.new(false)

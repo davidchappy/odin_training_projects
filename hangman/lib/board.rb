@@ -32,6 +32,7 @@ class Board
     case won
     when false
       puts "Sorry, you weren't able to guess the word. Better luck next time!"
+      puts "The word was: #{@game.word}"
     when true
       puts "Congratulations - you guessed the word!"
     end

@@ -44,9 +44,10 @@ class Saver
 
   def get_saves
     saves = []
+
     # select and load every file in the save directory
     Dir.foreach($save_path) do |item|
-      next if item == '.' or item == '..'
+      next if item == '.' or item == '..' or item == '.DS_Store'
       tmp_file = File.open($save_path + item, "r")
       saves << JSON.load(tmp_file)
     end
