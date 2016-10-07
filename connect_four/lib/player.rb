@@ -10,7 +10,13 @@ class Player
 
   def choose
     GameIO.give_output("Where will you place your token? (a - g): ", "print")
-    GameIO.get_input.downcase
+    choice = GameIO.get_input.downcase[0]
+    
+    unless ('a'..'g').include?(choice)
+      GameIO.give_output("Please type one character between a and g.")
+      choice = choose
+    end
+    choice
   end
 
 end

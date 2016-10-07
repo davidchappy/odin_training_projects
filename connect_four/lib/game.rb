@@ -4,7 +4,6 @@ class Game
   attr_accessor :board, :current_player
 
   def self.start
-    puts String.colors
     player1 = "David"
     player2 = "Kristin"
     @game = Game.new(player1, player2)

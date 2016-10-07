@@ -20,7 +20,7 @@ describe Player do
     let(:choice) { player.choose }
 
     it "requests user input" do 
-      allow(GameIO).to receive(:give_output).with("Where will you place your token? (a - g): ", print).and_return("")
+      allow(GameIO).to receive(:give_output).with("Where will you place your token? (a - g): ", "print")
       allow(GameIO).to receive(:get_input).and_return("a")
       expect(choice).to_not be_nil
       expect(choice).to be_a(String)
