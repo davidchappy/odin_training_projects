@@ -4,6 +4,7 @@ class Game
   attr_accessor :board, :current_player
 
   def self.start
+    puts String.colors
     player1 = "David"
     player2 = "Kristin"
     @game = Game.new(player1, player2)
@@ -15,7 +16,8 @@ class Game
     @player1 = Player.new(player1)
     @player2 = Player.new(player2)
     @players = [@player1, @player2]
-    set_colors(["R", "B"])
+    circle = "\u25C9".encode('utf-8')
+    set_colors([circle.colorize(:red), circle.colorize(:blue)])
     @current_player = set_starting_player
     @board = start_board
   end
@@ -186,10 +188,10 @@ class Game
 
   def print_board
     output = ""
-    output += "   a b c d e f g\n"
+    output += "   a b c d e f g\n".colorize(:light_white)
     rows = {}
     @board.each do |location,value|
-      rows[location[1]] ||= [(location[1] + " ")] 
+      rows[location[1]] ||= [(location[1] + " ").colorize(:light_white)] 
       rows[location[1]] << value
     end
     rows.each do |row_num,row|
