@@ -29,12 +29,13 @@ describe Game do
   describe "#row_victory?" do
 
     it "checks for a row victory" do
-      game.board[:a1] = "R"
-      game.board[:b1] = "R"
-      game.board[:c1] = "R"
+      game.board[:a1] = game.current_player.color
+      game.board[:b1] = game.current_player.color
+      game.board[:c1] = game.current_player.color
       expect(game.row_victory?).to eq(false)
 
-      game.board[:d1] = "R"
+      game.board[:d1] = game.current_player.color
+      # game.board[:e1] = "R"
       expect(game.row_victory?).to eq(true)
     end
 
@@ -43,12 +44,12 @@ describe Game do
   describe "#column_victory?" do
 
      it "checks for a column victory" do
-      game.board[:a1] = "R"
-      game.board[:a2] = "R"
-      game.board[:a3] = "R"
+      game.board[:a1] = game.current_player.color
+      game.board[:a2] = game.current_player.color
+      game.board[:a3] = game.current_player.color
       expect(game.column_victory?).to eq(false)
 
-      game.board[:a4] = "R"
+      game.board[:a4] = game.current_player.color
       expect(game.column_victory?).to eq(true)
     end
 
@@ -57,22 +58,22 @@ describe Game do
   describe "#diagonal_victory?" do
 
     it "checks for a diagonal victory (top left to bottom right)" do
-      game.board[:a1] = "R"
-      game.board[:b2] = "R"
-      game.board[:c3] = "R"
+      game.board[:a1] = game.current_player.color
+      game.board[:b2] = game.current_player.color
+      game.board[:c3] = game.current_player.color
       expect(game.diagonal_victory?).to eq(false)
 
-      game.board[:d4] = "R"
+      game.board[:d4] = game.current_player.color
       expect(game.diagonal_victory?).to eq(true)
     end
 
     it "checks for a diagonal victory (bottom left to top right)" do
-      game.board[:d1] = "R"
-      game.board[:c2] = "R"
-      game.board[:b3] = "R"
+      game.board[:d1] = game.current_player.color
+      game.board[:c2] = game.current_player.color
+      game.board[:b3] = game.current_player.color
       expect(game.diagonal_victory?).to eq(false)
 
-      game.board[:a4] = "R"
+      game.board[:a4] = game.current_player.color
       expect(game.diagonal_victory?).to eq(true)
     end
 

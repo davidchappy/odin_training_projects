@@ -28,6 +28,7 @@ class Game
       GameIO.give_output(print_turn_update)
       @board = add_token_to_board(@current_player.choose)
     end
+    GameIO.give_output(print_board)
     start_again
   end
 
@@ -50,7 +51,12 @@ class Game
 
   def row_victory?
     rows = @board.values.each_slice(7).to_a
-    count_consecutive_tokens(rows)
+    if count_consecutive_tokens(rows)
+      GameIO.give_output("Row Victory!")
+      true
+    else
+      false
+    end    
   end
 
   def column_victory?
@@ -59,7 +65,12 @@ class Game
       columns[i] ||= []
       @board.values.each_slice(7) { |a| columns[i] << a[i] }
     end
-    count_consecutive_tokens(columns)
+    if count_consecutive_tokens(columns)
+      GameIO.give_output("Column Victory!")
+      true
+    else
+      false
+    end  
   end
 
   def diagonal_victory?
@@ -80,8 +91,6 @@ class Game
     # get rid of unintended wrapping
     tl_diagonal_strips[3].pop 
 
-    return true if count_consecutive_tokens(tl_diagonal_strips)
-
     # top right to bottom left diagonal victory
     tr_diagonal_strips = []
     tr_start_points = [3,4,5,6,13,20] # these are index values of @board.keys at which a 4+ diagonal can be formed
@@ -101,15 +110,19 @@ class Game
     tr_diagonal_strips[1].pop(2)
     tr_diagonal_strips[2].pop(1)
 
-    return true if count_consecutive_tokens(tr_diagonal_strips)
-    false
+    if count_consecutive_tokens(tl_diagonal_strips) || count_consecutive_tokens(tr_diagonal_strips)
+      GameIO.give_output("Diagonal Victory!")
+      true
+    else
+      false
+    end  
   end
 
   def count_consecutive_tokens(target_array)
     target_array.each do |row|
       i = 0
       row.each_with_index do |spot,index|
-        i += 1 if spot == row[index - 1] && spot != $blank_spot
+        i += 1 if spot == row[index - 1] && spot == current_player.color
         return true if i >= 3
       end
     end
