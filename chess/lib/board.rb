@@ -5,11 +5,8 @@ class Board
   attr_accessor :board, :positions
 
   def initialize
-    @positions ||= generate_positions
-    @positions[:b4] = icon_white("\u2654")
-    @positions[:g4] = icon_white("\u2654")
-    @positions[:a7] = icon_black("\u265A")
-    @board = generate_board
+    @positions = generate_positions
+    @board = generate_board  
   end
 
   def generate_board
@@ -34,30 +31,39 @@ class Board
     board << header_row
     board << top_border
     8.downto(1) do |num|
-      board << "#{num.to_s.colorize(:white)} " + print_positions("a".upto("h").to_a.reverse, num, v_line) + v_line
+      board << "#{num.to_s.colorize(:white)} " + print_tiles("a".upto("h").to_a.reverse, num, v_line) + v_line
       unless num == 1
         board << "  #{left_join}" + spawn(spawn(h_line, 3) + cross, 7) + spawn(h_line, 3) + right_join
       end
     end
     board << bottom_border
-
     board
   end
 
   def generate_positions      
     positions = {}
     8.downto(1).each do |number|
-      ("a".."h").each do |letter|
-        positions[(letter + number.to_s).to_sym] = $blank 
-      end
+      fill_row(number, $blank, positions)
+    end
+    positions = add_pieces(positions)
+  end
+
+  def add_pieces(positions)
+    Piece.generate_pieces.each do |key, piece|
+      positions[piece.position.to_sym] = piece
     end
     positions
   end
 
-  def print_positions(letters, number, separator)
+  def print_tiles(letters, number, separator)
     output = ""
     letters.each do |letter|
-      output += "#{ separator + ' ' + @positions[(letter + number.to_s).to_sym] + ' ' }" 
+      position = @positions[(letter + number.to_s).to_sym]
+      if position == $blank
+        output += "#{ separator + ' ' + position + ' ' }" 
+      else # if tile has a piece, must use piece's 
+        output += "#{ separator + ' ' + position.icon + ' ' }" 
+      end
     end 
     output
   end
