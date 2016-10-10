@@ -21,4 +21,10 @@ module ChessHelpers
     [@player1,@player2].sample
   end
 
+  def fill_row(num, content, array, letters=("a".."h"))
+    letters.to_a.each do |letter|
+      array[(letter + num.to_s).to_sym] = content
+    end
+  end
+
 end
