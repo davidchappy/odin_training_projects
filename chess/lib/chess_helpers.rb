@@ -17,4 +17,8 @@ module ChessHelpers
     output
   end
 
+  def set_starting_player
+    [@player1,@player2].sample
+  end
+
 end
