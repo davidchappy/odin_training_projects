@@ -14,7 +14,7 @@ class Game
 
   def initialize
     @player1 = Player.new(1, "white", "David")
-    @player2 = Player.new(2, "blue", "Kristin")
+    @player2 = Player.new(2, "black", "Kristin")
     @current_player = set_starting_player
   end
 
