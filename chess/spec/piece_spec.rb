@@ -82,9 +82,9 @@ describe Piece do
       it "returns an array of legal moves for the King" do
         board.positions[:d1] = $blank
         board.positions[:e2] = Piece::Pawn.new("white", "e2")
-        expect(king.get_legal_moves(board)).to include("d1")
-        expect(king.get_legal_moves(board)).not_to include("e2")
-        expect(king.get_legal_moves(board)).not_to include("e3")
+        expect(king.moves(board)).to include("d1")
+        expect(king.moves(board)).not_to include("e2")
+        expect(king.moves(board)).not_to include("e3")
       end
 
     end

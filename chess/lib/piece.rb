@@ -2,8 +2,8 @@
 class Piece
   extend ChessHelpers
 
-  attr_reader :color, :icon, :legal_moves
-  attr_accessor :captured, :position
+  attr_reader :color, :icon
+  attr_accessor :captured, :position, :legal_moves
 
   def self.generate_pieces
     pieces = {}
@@ -51,6 +51,23 @@ class Piece
   def legal_move?(input)
     return true if @legal_moves.include?(input.to_s)
     false
+  end
+
+  def get_legal_moves(board, offset)
+    legal_moves = []
+    new_offsets = []
+
+    all_coordinates = board.positions.keys
+    position_index = all_coordinates.index(@position.to_sym)
+    offset.each_with_index do |offset,index| 
+      new_offsets[index] = offset + position_index
+    end
+    new_offsets.each do |i|
+      tile = all_coordinates[i].to_s
+      legal_moves << tile if board.open_tile?(tile)
+    end
+
+    legal_moves
   end
 
   class Pawn < Piece
@@ -115,21 +132,9 @@ class Piece
       @icon = get_icon(@color, @name)
     end
 
-    def get_legal_moves(board)
-      legal_moves = []
-
-      coordinates = board.positions.keys
-      position_index = coordinates.index(@position.to_sym)
+    def moves(board)
       king_offsets = [-9,-8,-7,-1,1,7,8,9]
-      king_offsets.each_with_index do |offset,index| 
-        king_offsets[index] = offset + position_index
-      end
-      king_offsets.each do |i|
-        tile = coordinates[i].to_s
-        legal_moves << tile if board.open_tile?(tile)
-      end
-
-      @legal_moves = legal_moves
+      @legal_moves = get_legal_moves(board, king_offsets)
     end
 
   end
