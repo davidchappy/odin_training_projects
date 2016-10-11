@@ -115,6 +115,23 @@ class Piece
       @icon = get_icon(@color, @name)
     end
 
+    def get_legal_moves(board)
+      legal_moves = []
+
+      coordinates = board.positions.keys
+      position_index = coordinates.index(@position.to_sym)
+      king_offsets = [-9,-8,-7,-1,1,7,8,9]
+      king_offsets.each_with_index do |offset,index| 
+        king_offsets[index] = offset + position_index
+      end
+      king_offsets.each do |i|
+        tile = coordinates[i].to_s
+        legal_moves << tile if board.open_tile?(tile)
+      end
+
+      @legal_moves = legal_moves
+    end
+
   end
 
   def get_icon(color, piece)
