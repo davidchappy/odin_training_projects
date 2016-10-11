@@ -10,8 +10,8 @@ class Piece
     pieces[:w_rk1] = Rook.new("white", "a1") 
     pieces[:w_kn1] = Knight.new("white", "b1") 
     pieces[:w_bp1] = Bishop.new("white", "c1") 
-    pieces[:w_kg] = King.new("white", "d1") 
-    pieces[:w_qn] = Queen.new("white", "e1") 
+    pieces[:w_kg] = King.new("white", "e1") 
+    pieces[:w_qn] = Queen.new("white", "d1") 
     pieces[:w_bp2] = Bishop.new("white", "f1") 
     pieces[:w_kn2] = Knight.new("white", "g1") 
     pieces[:w_rk2] = Rook.new("white", "h1")
@@ -32,6 +32,7 @@ class Piece
     pawns.each_with_index do |position, index|
       pieces[("b_pn" + (index+1).to_s).to_sym] = pawns[index]
     end
+
     @pieces = pieces
   end
 
@@ -112,20 +113,20 @@ class Piece
   def get_icon(color, piece)
     icons = {}
     icons[:white] = {
-      :pawn => "\u2659",
-      :knight => "\u2658",
-      :bishop => "\u2657",
-      :rook => "\u2656",
-      :queen => "\u2655",
-      :king => "\u2654",
+      :pawn => "\u2659".colorize(:white),
+      :knight => "\u2658".colorize(:white),
+      :bishop => "\u2657".colorize(:white),
+      :rook => "\u2656".colorize(:white),
+      :queen => "\u2655".colorize(:white),
+      :king => "\u2654".colorize(:white)
     }
     icons[:black] = {
-      :pawn => "\u265F",
-      :knight => "\u265E",
-      :bishop => "\u265D",
-      :rook => "\u265C",
-      :queen => "\u265B",
-      :king => "\u265A",
+      :pawn => "\u265F".colorize(:blue),
+      :knight => "\u265E".colorize(:blue),
+      :bishop => "\u265D".colorize(:blue),
+      :rook => "\u265C".colorize(:blue),
+      :queen => "\u265B".colorize(:blue),
+      :king => "\u265A".colorize(:blue)
     }
 
     icon = icons[color.to_sym][piece.to_sym]

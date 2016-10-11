@@ -5,13 +5,30 @@ class Board
   attr_accessor :board, :positions
 
   def initialize
-    @positions = generate_positions
+    positions = generate_tiles
+    @positions = add_pieces_to_tiles(positions)
     @board = generate_board  
+  end
+
+  def generate_tiles      
+    positions = {}
+    8.downto(1).each do |number|
+      fill_row(number, $blank, positions)
+    end
+    positions  
+  end
+
+  def add_pieces_to_tiles(positions)
+    Piece.generate_pieces.each do |key, piece|
+      positions[piece.position.to_sym] = piece
+    end
+    positions
   end
 
   def generate_board
     board = []
 
+    # box drawing characters: https://en.wikipedia.org/wiki/Box-drawing_character
     up_left = icon_white("\u250c")
     up_right = icon_white("\u2510")
     down_left = icon_white("\u2514")
@@ -31,7 +48,7 @@ class Board
     board << header_row
     board << top_border
     8.downto(1) do |num|
-      board << "#{num.to_s.colorize(:white)} " + print_tiles("a".upto("h").to_a.reverse, num, v_line) + v_line
+      board << "#{num.to_s.colorize(:white)} " + merge_tiles_with_board("a".upto("h").to_a.reverse, num, v_line) + v_line
       unless num == 1
         board << "  #{left_join}" + spawn(spawn(h_line, 3) + cross, 7) + spawn(h_line, 3) + right_join
       end
@@ -40,22 +57,7 @@ class Board
     board
   end
 
-  def generate_positions      
-    positions = {}
-    8.downto(1).each do |number|
-      fill_row(number, $blank, positions)
-    end
-    positions = add_pieces(positions)
-  end
-
-  def add_pieces(positions)
-    Piece.generate_pieces.each do |key, piece|
-      positions[piece.position.to_sym] = piece
-    end
-    positions
-  end
-
-  def print_tiles(letters, number, separator)
+  def merge_tiles_with_board(letters, number, separator)
     output = ""
     letters.each do |letter|
       position = @positions[(letter + number.to_s).to_sym]
