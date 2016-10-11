@@ -34,5 +34,9 @@ class Game
     [@player1,@player2].sample
   end
 
+  def switch_players(current_player=@current_player, players=[@player1, @player2])
+    current_player == players[0] ? players[1] : players[0]
+  end
+
 
 end
