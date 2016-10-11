@@ -47,6 +47,7 @@ class Board
 
     board << header_row
     board << top_border
+    # add rows to board and merge tiles
     8.downto(1) do |num|
       board << "#{num.to_s.colorize(:white)} " + merge_tiles_with_board("a".upto("h").to_a.reverse, num, v_line) + v_line
       unless num == 1

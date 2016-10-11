@@ -76,11 +76,16 @@ describe Board do
 
     it "returns an array of board output characters" do
       expect(board_tiles).to be_a(Array)
+      # header row (1) + top/bottom borders(2) + rows (8) + row dividers (7) = 18
       expect(board_tiles.length).to eq(18)
     end
 
-    # unable to test actual output because of extra characters added by colorize plugin
-    # chose not to test the #merge_tiles_with_board helper method
+    it "returns the header row" do
+      expect(board_tiles[0]).to include("a   b   c   d   e   f   g   h")
+    end
+
+    # not feasible to test actual board output because of extra characters added by colorize plugin
+    # unnecessary to test the #merge_tiles_with_board helper method
 
   end
 

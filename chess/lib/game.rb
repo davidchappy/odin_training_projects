@@ -9,6 +9,7 @@ class Game
     @game = Game.new
     @board = Board.new
     puts @board.board
+    p @board.board
   end
 
   def initialize
