@@ -55,5 +55,33 @@ describe Piece do
 
   end
 
+  describe "#legal_move?" do
+
+    let(:pawn) { Piece::Pawn.new("white","a2") }
+
+    it "returns true if input is in the legal_moves variable" do
+      expect(pawn.legal_move?("a4")).to eq(true)
+      expect(pawn.legal_moves).to include("a4")
+    end
+
+    it "returns false if input is not in the legal_moves variable" do
+      expect(pawn.legal_move?("b3")).to eq(false)
+      expect(pawn.legal_moves).not_to include("b3")
+    end
+
+  end
+
+  describe Piece::King do
+
+    let(:king) { Piece::King.new("white", "e1") }
+
+    describe "#get_legal_moves" do
+
+      it ""
+
+    end
+
+  end
+
 
 end

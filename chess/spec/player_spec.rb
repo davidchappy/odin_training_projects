@@ -36,7 +36,7 @@ describe Player do
     end
 
     it "requests a player's move as an array of 2 coordinates" do 
-      expect(GameIO).to receive(:give_output).with("Choose a piece to move and destination separated by a comma (ex: a8,a4): ", "print").and_return("")
+      expect(GameIO).to receive(:give_output).with("Choose a valid piece and destination separated by a comma (ex: a8,a4): ", "print").and_return("")
       expect(GameIO).to receive(:get_input).and_return("a8,a4")
       expect(move).to_not be_nil
       expect(move).to be_a(Array)
@@ -46,25 +46,25 @@ describe Player do
     end
 
     it "expects both responses to be within the board's tiles" do
-      expect(GameIO).to receive(:give_output).with("Choose a piece to move and destination separated by a comma (ex: a8,a4): ", "print").and_return("")
+      expect(GameIO).to receive(:give_output).with("Choose a valid piece and destination separated by a comma (ex: a8,a4): ", "print").and_return("")
       expect(GameIO).to receive(:get_input).and_return("a8,a4")
       expect(board.positions.keys).to include(move[0].to_sym)
       expect(board.positions.keys).to include(move[1].to_sym)
     end
 
     it "expects first coordinate to target a piece" do
-      expect(GameIO).to receive(:give_output).with("Choose a piece to move and destination separated by a comma (ex: a8,a4): ", "print").and_return("")
+      expect(GameIO).to receive(:give_output).with("Choose a valid piece and destination separated by a comma (ex: a8,a4): ", "print").and_return("")
       expect(GameIO).to receive(:get_input).and_return("a8,a4")
       expect(board.positions[move[0].to_sym]).to_not eq($blank)
       expect(board.positions[move[0].to_sym]).to be_a(Piece)
     end
 
-    # it "expects second coordinate to target a legal move" do
-    #   expect(GameIO).to receive(:give_output).with("Choose a piece to move and destination separated by a comma (ex: a8,a4): ", "print").and_return("")
-    #   expect(GameIO).to receive(:get_input).and_return("a8,a4")
-    #   piece = board.positions[move[0].to_sym]
-    #   expect(piece.legal_moves).to include(move[1])
-    # end
+    it "expects second coordinate to target a legal move" do
+      expect(GameIO).to receive(:give_output).with("Choose a valid piece and destination separated by a comma (ex: a8,a4): ", "print").and_return("")
+      expect(GameIO).to receive(:get_input).and_return("a8,a4")
+      piece = board.positions[move[0].to_sym]
+      expect(piece.legal_move?(move[1])).to be(true)
+    end
 
   end
 

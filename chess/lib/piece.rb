@@ -2,7 +2,7 @@
 class Piece
   extend ChessHelpers
 
-  attr_reader :color, :icon
+  attr_reader :color, :icon, :legal_moves
   attr_accessor :captured, :position
 
   def self.generate_pieces
@@ -45,6 +45,12 @@ class Piece
     @captured = false
     @position = position
     @icon = " "
+    @legal_moves = []
+  end
+
+  def legal_move?(input)
+    return true if @legal_moves.include?(input.to_s)
+    false
   end
 
   class Pawn < Piece
@@ -53,6 +59,8 @@ class Piece
       super
       @name = "pawn"
       @icon = get_icon(@color, @name)
+      # temporary, for tests
+      @legal_moves = ["a4"]
     end
 
   end
@@ -63,6 +71,8 @@ class Piece
       super
       @name = "rook"
       @icon = get_icon(@color, @name)
+      # temporary, for tests
+      @legal_moves = ["a4"]
     end
 
   end

@@ -9,7 +9,6 @@ class Game
     @game = Game.new
     @board = Board.new
     puts @board.board
-    p @board.board
   end
 
   def initialize
@@ -23,7 +22,7 @@ class Game
   #     @current_player = switch_players(@current_player)
   #     GameIO.print_board(@board.board)
   #     GameIO.print_turn_update(@current_player)
-  #     move = @current_player.take_turn
+  #     move = @current_player.take_turn(@board)
   #     @board.update_board(move)
   #   end
   #   GameIO.print_board(@board.board)
@@ -37,6 +36,5 @@ class Game
   def switch_players(current_player=@current_player, players=[@player1, @player2])
     current_player == players[0] ? players[1] : players[0]
   end
-
 
 end
