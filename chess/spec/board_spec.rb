@@ -89,5 +89,27 @@ describe Board do
 
   end
 
+  describe "#valid_tile?" do
+
+    it "returns true if input is a valid tile on the board" do
+      expect(board.valid_tile?("a8")).to be(true)
+      expect(board.valid_tile?("d8")).to be(true)
+    end
+
+    it "returns false if input is not a valid tile" do
+      expect(board.valid_tile?("b9")).to be(false)
+    end
+  end
+
+  describe "#is_piece?" do
+
+    it "returns true if input is a valid tile on the board" do
+      expect(board.is_piece?("a8")).to be(true)
+    end
+
+    it "returns false if input is not a valid tile" do
+      expect(board.is_piece?("a4")).to be(false)
+    end
+  end
 
 end

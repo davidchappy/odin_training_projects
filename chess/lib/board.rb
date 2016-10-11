@@ -71,4 +71,14 @@ class Board
     output
   end
 
+  def valid_tile?(coordinate)
+    return true if positions.keys.include?(coordinate.to_sym)
+    false
+  end
+
+  def is_piece?(coordinate)
+    return true if positions[coordinate.to_sym].class.ancestors.include?(Piece)
+    false
+  end
+
 end
