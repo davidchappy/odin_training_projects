@@ -2,12 +2,18 @@
 class Board
   include ChessHelpers
 
-  attr_accessor :board, :positions
+  attr_reader :positions
+  attr_accessor :board
 
   def initialize
     positions = generate_tiles
     @positions = add_pieces_to_tiles(positions)
     @board = generate_board  
+  end
+
+  def positions=positions
+    @positions = positions
+    @board = generate_board
   end
 
   def generate_tiles      
@@ -78,6 +84,11 @@ class Board
 
   def is_piece?(coordinate)
     return true if positions[coordinate.to_sym].class.ancestors.include?(Piece)
+    false
+  end
+
+  def open_tile?(coordinate)
+    return true if valid_tile?(coordinate) && !is_piece?(coordinate)
     false
   end
 

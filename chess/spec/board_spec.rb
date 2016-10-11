@@ -112,4 +112,14 @@ describe Board do
     end
   end
 
+  describe "#open_tile?" do
+
+    it "returns true if coordinate is on the board and blank" do
+      board.positions[:e6] = $blank
+      board.positions[:d8] = Piece::Queen.new("black", "d8")
+      expect(board.open_tile?("e6")).to be(true)
+      expect(board.open_tile?("d8")).to be(false)
+    end
+  end
+
 end
