@@ -78,12 +78,12 @@ class Board
   end
 
   def valid_tile?(coordinate)
-    return true if positions.keys.include?(coordinate.to_sym)
+    return true if !coordinate.nil? && positions.keys.include?(coordinate.to_sym)
     false
   end
 
   def is_piece?(coordinate)
-    return true if positions[coordinate.to_sym].class.ancestors.include?(Piece)
+    return true if !coordinate.nil? && positions[coordinate.to_sym].class.ancestors.include?(Piece)
     false
   end
 
