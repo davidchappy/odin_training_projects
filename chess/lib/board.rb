@@ -6,14 +6,18 @@ class Board
   attr_accessor :board
 
   def initialize
-    positions = generate_tiles
-    @positions = add_pieces_to_tiles(positions)
+    @@tiles = generate_tiles
+    @positions = add_pieces_to_tiles(@@tiles)
     @board = generate_board  
   end
 
   def positions=positions
     @positions = positions
     @board = generate_board
+  end
+
+  def self.tiles
+    @@tiles
   end
 
   def generate_tiles      
@@ -92,13 +96,13 @@ class Board
     false
   end
 
-  def is_enemy?(coordinate, current_player)
-    return true if is_piece?(coordinate) && current_player.color != positions[coordinate.to_sym].color
+  def is_enemy?(coordinate, player_color)
+    return true if is_piece?(coordinate) && player_color != positions[coordinate.to_sym].color
     false
   end
 
-  def obstructed?(coordinate, current_player)
-    return true if is_piece?(coordinate) && !is_enemy?(coordinate, current_player)
+  def obstructed?(coordinate, player_color)
+    return true if is_piece?(coordinate) && !is_enemy?(coordinate, player_color)
     false
   end
 

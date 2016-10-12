@@ -23,7 +23,7 @@ class Player
     when !board.is_piece?(target)
       GameIO.give_output("Sorry, there's no piece there.")
       take_turn(board)
-    when board.is_enemy?(target, self)
+    when board.is_enemy?(target, self.color)
       GameIO.give_output("Sorry, you can't move your opponent's piece.")
       take_turn(board)
     when !board.positions[target.to_sym].possible_move?(destination, board)

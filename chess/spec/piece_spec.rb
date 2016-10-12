@@ -77,7 +77,7 @@ describe Piece do
 
     let(:king) { Piece::King.new("white", "e1") }
 
-    describe "#get_legal_moves" do
+    describe "#moves" do
 
       it "returns an array of legal moves for the King" do
         board.positions[:d1] = $blank
@@ -85,6 +85,52 @@ describe Piece do
         expect(king.moves(board)).to include("d1")
         expect(king.moves(board)).not_to include("e2")
         expect(king.moves(board)).not_to include("e3")
+      end
+
+      it "accurately reflects all and only available moves" do
+        board.positions[:d1] = $blank
+        board.positions[:e2] = $blank
+        board.positions[:f1] = $blank
+        board.positions[:d2] = Piece::Pawn.new("white", "e2")
+        board.positions[:f2] = Piece::Pawn.new("black", "f2")
+        expect(king.moves(board)).to include("d1")
+        expect(king.moves(board)).to include("e2")
+        expect(king.moves(board)).to include("f1")
+        expect(king.moves(board)).to include("f2")
+        expect(king.moves(board)).not_to include("d2")
+      end
+
+      it "doesn't include tiles off the board" do
+        expect(king.moves(board)).not_to include("z2")
+      end
+
+    end
+
+  end
+
+  describe Piece::Knight do
+
+    let(:knight) { Piece::Knight.new("white", "d4") }
+
+    describe "#moves" do
+
+      it "accurately reflects all and only available moves" do
+        board.positions[:b5] = $blank
+        board.positions[:f5] = $blank
+        board.positions[:b3] = $blank
+        board.positions[:c2] = $blank
+        board.positions[:e2] = Piece::Pawn.new("white", "e2")
+        board.positions[:e6] = Piece::Pawn.new("black", "e6")
+        expect(knight.moves(board)).to include("b5")
+        expect(knight.moves(board)).to include("f5")
+        expect(knight.moves(board)).to include("b3")
+        expect(knight.moves(board)).to include("c2")
+        expect(knight.moves(board)).to include("e6")
+        expect(knight.moves(board)).not_to include("e2")
+      end
+
+      it "doesn't include tiles off the board" do
+        expect(knight.moves(board)).not_to include("x1")
       end
 
     end

@@ -52,21 +52,19 @@ class Piece
     false
   end
 
-  def get_legal_moves(board, offset)
-    legal_moves = []
-    new_offsets = []
+  def generate_adjacent_tiles(offsets)
+    adjacent_tiles = []
+    # get current position's index within array of tiles keys
+    all_coordinates = Board.tiles.keys
+    current_position_index = all_coordinates.index(@position.to_sym)
 
-    all_coordinates = board.positions.keys
-    position_index = all_coordinates.index(@position.to_sym)
-    offset.each_with_index do |offset,index| 
-      new_offsets[index] = offset + position_index
-    end
-    new_offsets.each do |i|
-      tile = all_coordinates[i].to_s
-      legal_moves << tile if board.open_tile?(tile)
+    offsets.each do |offset|
+      adjusted_index = current_position_index + offset
+      tile = all_coordinates[adjusted_index].to_s if adjusted_index.between?(0,63)
+      adjacent_tiles << tile
     end
 
-    legal_moves
+    adjacent_tiles
   end
 
   class Pawn < Piece
@@ -108,7 +106,13 @@ class Piece
     end
 
     def moves(board)
+      possible_moves = []
       offsets = [-17,-15,-10,-6,6,10,15,17]
+      legal_moves = generate_adjacent_tiles(offsets)
+      legal_moves.each do |move|
+        possible_moves << move unless board.obstructed?(move, @color)
+      end
+      possible_moves
     end
 
   end
@@ -150,8 +154,13 @@ class Piece
     end
 
     def moves(board)
-      king_offsets = [-9,-8,-7,-1,1,7,8,9]
-      get_legal_moves(board, king_offsets)
+      possible_moves = []
+      offsets = [-9,-8,-7,-1,1,7,8,9]
+      legal_moves = generate_adjacent_tiles(offsets)
+      legal_moves.each do |move|
+        possible_moves << move unless board.obstructed?(move, @color)
+      end
+      possible_moves
     end
 
   end
