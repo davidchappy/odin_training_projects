@@ -3,7 +3,7 @@ class Piece
   extend ChessHelpers
 
   attr_reader :color, :icon
-  attr_accessor :captured, :position, :legal_moves
+  attr_accessor :captured, :position
 
   def self.generate_pieces
     pieces = {}
@@ -45,11 +45,10 @@ class Piece
     @captured = false
     @position = position
     @icon = " "
-    @legal_moves = []
   end
 
-  def legal_move?(input)
-    return true if @legal_moves.include?(input.to_s)
+  def possible_move?(destination, board)
+    return true if moves(board).include?(destination)
     false
   end
 
@@ -76,8 +75,10 @@ class Piece
       super
       @name = "pawn"
       @icon = get_icon(@color, @name)
-      # temporary, for tests
-      @legal_moves = ["a4"]
+    end
+
+    def moves(board)
+      ["a4"]
     end
 
   end
@@ -89,7 +90,11 @@ class Piece
       @name = "rook"
       @icon = get_icon(@color, @name)
       # temporary, for tests
-      @legal_moves = ["a4"]
+    end
+
+    def moves(board)
+      offsets = [-8,-1,1,8]
+      ["a4"]
     end
 
   end
@@ -102,6 +107,10 @@ class Piece
       @icon = get_icon(@color, @name)
     end
 
+    def moves(board)
+      offsets = [-17,-15,-10,-6,6,10,15,17]
+    end
+
   end
 
   class Bishop < Piece
@@ -112,6 +121,10 @@ class Piece
       @icon = get_icon(@color, @name)
     end
 
+    def moves(board)
+      offsets = [-9,-7,7,9]
+    end
+
   end
 
   class Queen < Piece
@@ -120,6 +133,10 @@ class Piece
       super
       @name = "queen"
       @icon = get_icon(@color, @name)
+    end
+
+    def moves(board)
+      offsets = [-9,-8,-7,-1,1,7,8,9]
     end
 
   end
@@ -134,7 +151,7 @@ class Piece
 
     def moves(board)
       king_offsets = [-9,-8,-7,-1,1,7,8,9]
-      @legal_moves = get_legal_moves(board, king_offsets)
+      get_legal_moves(board, king_offsets)
     end
 
   end

@@ -62,13 +62,13 @@ describe Piece do
     let(:pawn) { Piece::Pawn.new("white","a2") }
 
     it "returns true if input is in the legal_moves variable" do
-      expect(pawn.legal_move?("a4")).to eq(true)
-      expect(pawn.legal_moves).to include("a4")
+      expect(pawn.possible_move?("a4", board)).to eq(true)
+      expect(pawn.moves(board)).to include("a4")
     end
 
     it "returns false if input is not in the legal_moves variable" do
-      expect(pawn.legal_move?("b3")).to eq(false)
-      expect(pawn.legal_moves).not_to include("b3")
+      expect(pawn.possible_move?("b3", board)).to eq(false)
+      expect(pawn.moves(board)).not_to include("b3")
     end
 
   end
