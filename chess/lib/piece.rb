@@ -52,6 +52,7 @@ class Piece
     false
   end
 
+  # for knight and king
   def generate_adjacent_tiles(offsets)
     adjacent_tiles = []
     # get current position's index within array of tiles keys
@@ -67,6 +68,53 @@ class Piece
     adjacent_tiles
   end
 
+  # for queen, bishop and rook
+  def generate_paths_for(offsets, board)
+    path_tiles = []
+    all_coordinates = Board.tiles.keys
+    current_position_index = all_coordinates.index(@position.to_sym)    
+
+    offsets.each do |offset|
+      i = 1
+      # max length of a path in any direction is 7
+      7.times do |n|   
+        adjusted_offset = offset * i     
+        next_tile = generate_adjacent_tiles([adjusted_offset])[0]
+        case 
+        when next_tile.nil? || wrapped?(next_tile, path_tiles)
+          break
+        when board.is_piece?(next_tile)
+          if board.is_enemy?(next_tile, @color)
+            path_tiles << next_tile
+            break
+          else
+            break
+          end
+        end
+        path_tiles << next_tile
+        i += 1
+      end
+    end
+    # p path_tiles
+    path_tiles
+  end
+
+  def wrapped?(next_tile, path_tiles)
+    return false if path_tiles.empty? || path_tiles.nil?
+    last_tile_letter = path_tiles.last[0]
+    next_tile_letter = next_tile[0]
+    # puts "Starting wrapped? output"
+    # p path_tiles
+    # p next_tile
+    if next_tile_letter == "h" && last_tile_letter == "a"
+      return true
+    elsif next_tile_letter == "a" && last_tile_letter == "h"
+      return true
+    else 
+      return false
+    end
+  end
+
   class Pawn < Piece
 
     def initialize(color, position="")
@@ -76,7 +124,23 @@ class Piece
     end
 
     def moves(board)
-      ["a4"]
+      possible_moves = []
+      offsets = []
+      if @color == "white"
+        offsets = [-8]
+        # if in starting position allow two moves forward
+        if @position[1] = "1"
+          offsets << -16
+        end
+      else
+        offsets = [8]
+        if @position[1] = "7"
+          offsets << 16
+        end
+      end
+      legal_moves = generate_adjacent_tiles(offsets)
+      legal_moves.each { |move| possible_moves << move unless board.obstructed?(move, @color) }
+      possible_moves
     end
 
   end
@@ -92,7 +156,7 @@ class Piece
 
     def moves(board)
       offsets = [-8,-1,1,8]
-      ["a4"]
+      generate_paths_for(offsets, board)
     end
 
   end
@@ -109,9 +173,7 @@ class Piece
       possible_moves = []
       offsets = [-17,-15,-10,-6,6,10,15,17]
       legal_moves = generate_adjacent_tiles(offsets)
-      legal_moves.each do |move|
-        possible_moves << move unless board.obstructed?(move, @color)
-      end
+      legal_moves.each { |move| possible_moves << move unless board.obstructed?(move, @color) }
       possible_moves
     end
 
@@ -127,6 +189,7 @@ class Piece
 
     def moves(board)
       offsets = [-9,-7,7,9]
+      generate_paths_for(offsets, board)
     end
 
   end
@@ -141,6 +204,7 @@ class Piece
 
     def moves(board)
       offsets = [-9,-8,-7,-1,1,7,8,9]
+      generate_paths_for(offsets, board)
     end
 
   end
@@ -157,9 +221,7 @@ class Piece
       possible_moves = []
       offsets = [-9,-8,-7,-1,1,7,8,9]
       legal_moves = generate_adjacent_tiles(offsets)
-      legal_moves.each do |move|
-        possible_moves << move unless board.obstructed?(move, @color)
-      end
+      legal_moves.each { |move| possible_moves << move unless board.obstructed?(move, @color) }
       possible_moves
     end
 

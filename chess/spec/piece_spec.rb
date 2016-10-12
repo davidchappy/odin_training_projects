@@ -57,18 +57,33 @@ describe Piece do
 
   end
 
-  describe "#legal_move?" do
+  describe "#possible_move?" do
 
-    let(:pawn) { Piece::Pawn.new("white","a2") }
+    let(:king) { Piece::King.new("white","e1") }
 
-    it "returns true if input is in the legal_moves variable" do
-      expect(pawn.possible_move?("a4", board)).to eq(true)
-      expect(pawn.moves(board)).to include("a4")
+    it "returns true if piece's move method includes destination" do
+      board.positions[:e2] = $blank
+      expect(king.possible_move?("e2", board)).to eq(true)
+      expect(king.moves(board)).to include("e2")
     end
 
-    it "returns false if input is not in the legal_moves variable" do
-      expect(pawn.possible_move?("b3", board)).to eq(false)
-      expect(pawn.moves(board)).not_to include("b3")
+    it "returns false if piece's move method doesn't include destination" do
+      expect(king.possible_move?("d1", board)).to eq(false)
+      expect(king.moves(board)).not_to include("d1")
+    end
+
+  end
+
+  describe "#generate_paths_for" do
+
+    let(:queen) { Piece::Queen.new("white","d4") }
+
+    it "returns open path (as array) for each adjacent tile" do
+      offsets = [-9,-8,-7,-1,1,7,8,9]
+      expect(queen.generate_paths_for(offsets, board)).to include("f6")
+      expect(queen.generate_paths_for(offsets, board)).to include("c3")
+      expect(queen.generate_paths_for(offsets, board)).not_to include("b5")
+      expect(queen.generate_paths_for(offsets, board)).not_to include("f3")
     end
 
   end
@@ -131,6 +146,29 @@ describe Piece do
 
       it "doesn't include tiles off the board" do
         expect(knight.moves(board)).not_to include("x1")
+      end
+
+    end
+
+  end
+
+  describe Piece::Queen do
+
+    let(:queen) { Piece::Queen.new("white","d1") }
+
+    describe "#moves" do
+
+      it "accurately reflects all and only available moves" do
+        board.positions[:c2] = Piece::Pawn.new("white", "c2")
+        board.positions[:e2] = $blank
+        board.positions[:d2] = $blank
+        board.positions[:d7] = Piece::Pawn.new("black", "d7")
+        expect(queen.moves(board)).to include("g4")
+        expect(queen.moves(board)).to include("d3")
+        expect(queen.moves(board)).to include("d7")
+        expect(queen.moves(board)).not_to include("b3")
+        expect(queen.moves(board)).not_to include("e1")
+        expect(queen.moves(board)).not_to include("c2")
       end
 
     end
