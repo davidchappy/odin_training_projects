@@ -92,4 +92,14 @@ class Board
     false
   end
 
+  def is_enemy?(coordinate, current_player)
+    return true if is_piece?(coordinate) && current_player.color != positions[coordinate.to_sym].color
+    false
+  end
+
+  def obstructed?(coordinate, current_player)
+    return true if is_piece?(coordinate) && !is_enemy?(coordinate, current_player)
+    false
+  end
+
 end
