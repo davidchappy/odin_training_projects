@@ -218,12 +218,11 @@ describe Piece do
 
   describe Piece::Pawn do
 
-    let(:pawn) { Piece::Pawn.new("white","f2") }
-
     describe "#moves" do
 
+      let(:pawn) { Piece::Pawn.new("white","f2") }
+
       it "allows 2 tiles forward in starting position" do
-        pawn.name = "Crazy Pawn"
         board.positions[:f3] = $blank
         board.positions[:f4] = $blank
         expect(pawn.moves(board)).to include("f3")
@@ -236,7 +235,11 @@ describe Piece do
       end
 
       it "allows only 1 tile forward when not in starting position" do
-
+        pawn = Piece::Pawn.new("white","g3")
+        board.positions[:g4] = $blank
+        board.positions[:g5] = $blank
+        expect(pawn.moves(board)).to include("g4")
+        expect(pawn.moves(board)).not_to include("g5")
       end
 
     end
