@@ -21,6 +21,10 @@ class GameIO
 
   def self.print_board(board)
     self.give_output(board)
+    captured = ["Captured pieces: "]
+    board.positions.each {|p| captured << p.name if board.is_piece?(p) && p.captured == true }
+    captured = captured.join(", ")
+    self.give_output(captured, "print")
   end
 
   def self.print_turn_update(player, move, board, check=false)
