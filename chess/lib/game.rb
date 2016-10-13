@@ -10,10 +10,10 @@ class Game
     @board = Board.new
     # puts @board.positions
     puts @board.board    
-
     # Board.tiles.keys.each_with_index do |key,index|
     #   puts "Key: #{key}; Index: #{index}"
     # end
+    process_turns
   end
 
   def initialize
@@ -22,17 +22,22 @@ class Game
     @current_player = set_starting_player
   end
 
-  # def process_turns
-  #   until game_over?
-  #     @current_player = switch_players(@current_player)
-  #     GameIO.print_board(@board.board)
-  #     GameIO.print_turn_update(@current_player)
-  #     move = @current_player.take_turn(@board)
-  #     @board.update_board(move)
-  #   end
-  #   GameIO.print_board(@board.board)
-  #   start_again
-  # end
+  def process_turns
+    until check_mate?
+      GameIO.print_board(@board.board)
+      if check?
+        move = @current_player.take_turn(@board, true)
+        GameIO.print_turn_update(@current_player, move, true)
+      else
+        move = @current_player.take_turn(@board)
+        GameIO.print_turn_update(@current_player, move)
+      end
+      @board.update_board(move)
+      @current_player = switch_players(@current_player)
+    end
+    GameIO.print_board(@board.board)
+    start_again
+  end
 
   def set_starting_player
     [@player1,@player2].sample
@@ -40,6 +45,14 @@ class Game
 
   def switch_players(current_player=@current_player, players=[@player1, @player2])
     current_player == players[0] ? players[1] : players[0]
+  end
+
+  def check?
+    false
+  end
+
+  def check_mate?
+    false
   end
 
 end

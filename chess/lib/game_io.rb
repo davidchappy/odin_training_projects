@@ -19,4 +19,14 @@ class GameIO
     self.get_input
   end
 
+  def self.print_board(board)
+    self.give_output(board)
+  end
+
+  def self.print_turn_update(player, move, check=false)
+    self.give_output(move)
+  end
+
+
+
 end
