@@ -23,8 +23,11 @@ class GameIO
     self.give_output(board)
   end
 
-  def self.print_turn_update(player, move, check=false)
-    self.give_output(move)
+  def self.print_turn_update(player, move, board, check=false)
+    piece = board.find_piece(move[0])
+    destination = move[1]
+    output = "#{player.name} moved #{piece.name} to #{destination}"
+    self.give_output(output)
   end
 
 

@@ -2,8 +2,7 @@
 class Board
   include ChessHelpers
 
-  attr_reader :positions
-  attr_accessor :board
+  attr_accessor :board, :positions
 
   def initialize
     @@tiles = generate_tiles
@@ -81,6 +80,15 @@ class Board
     output
   end
 
+  def update_board(move)
+    start_position = move[0]
+    piece = find_piece(start_position)
+    destination = move[1]
+    @positions[start_position.to_sym] = $blank
+    @positions[destination.to_sym] = piece
+    @board = generate_board
+  end
+
   def valid_tile?(coordinate)
     return true if !coordinate.nil? && positions.keys.include?(coordinate.to_sym)
     false
@@ -104,6 +112,11 @@ class Board
   def obstructed?(coordinate, player_color)
     return true if is_piece?(coordinate) && !is_enemy?(coordinate, player_color)
     false
+  end
+
+  def find_piece(coordinate)
+    raise "that's not a piece" if !is_piece?(coordinate)
+    piece = positions[coordinate.to_sym]
   end
 
 end

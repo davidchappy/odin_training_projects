@@ -7,19 +7,18 @@ class Game
 
   def self.start
     @game = Game.new
-    @board = Board.new
-    # puts @board.positions
-    puts @board.board    
-    # Board.tiles.keys.each_with_index do |key,index|
-    #   puts "Key: #{key}; Index: #{index}"
-    # end
-    process_turns
+    @game.process_turns
   end
 
   def initialize
     @player1 = Player.new(1, "white", "David")
     @player2 = Player.new(2, "black", "Kristin")
     @current_player = set_starting_player
+    @board = Board.new
+    # puts @board.positions
+    # Board.tiles.keys.each_with_index do |key,index|
+    #   puts "Key: #{key}; Index: #{index}"
+    # end
   end
 
   def process_turns
@@ -27,10 +26,10 @@ class Game
       GameIO.print_board(@board.board)
       if check?
         move = @current_player.take_turn(@board, true)
-        GameIO.print_turn_update(@current_player, move, true)
+        GameIO.print_turn_update(@current_player, move, @board, true)
       else
         move = @current_player.take_turn(@board)
-        GameIO.print_turn_update(@current_player, move)
+        GameIO.print_turn_update(@current_player, move, @board)
       end
       @board.update_board(move)
       @current_player = switch_players(@current_player)

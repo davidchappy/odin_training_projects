@@ -12,7 +12,7 @@ class Player
   def take_turn(board, check=false)
     move = []
 
-    GameIO.give_output("It's #{@color}'s turn.\nChoose a valid piece and destination separated by a comma (ex: a2,a3): ", "print")
+    GameIO.give_output("It's #{@name}'s (#{@color}) turn.\nChoose a valid piece and destination separated by a comma (ex: a2,a3): ", "print")
     move = GameIO.get_input.split(",").collect!{|x| x.strip || x }
     target = move[0]
     # p target
