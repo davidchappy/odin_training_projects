@@ -8,11 +8,12 @@ class Game
   def self.start
     @game = Game.new
     @board = Board.new
+    # puts @board.positions
     puts @board.board    
 
-    Board.tiles.keys.each_with_index do |key,index|
-      puts "Key: #{key}; Index: #{index}"
-    end
+    # Board.tiles.keys.each_with_index do |key,index|
+    #   puts "Key: #{key}; Index: #{index}"
+    # end
   end
 
   def initialize

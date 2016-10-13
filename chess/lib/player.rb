@@ -12,9 +12,11 @@ class Player
   def take_turn(board)
     move = []
 
-    GameIO.give_output("Choose a valid piece and destination separated by a comma (ex: a2,a4): ", "print")
+    GameIO.give_output("Choose a valid piece and destination separated by a comma (ex: a2,a3): ", "print")
     move = GameIO.get_input.split(",").collect!{|x| x.strip || x }
     target = move[0]
+    # p target
+    # p board.positions[target.to_sym].moves(board)
     destination = move[1]
     case
     when !board.valid_tile?(target)

@@ -3,7 +3,7 @@ class Piece
   extend ChessHelpers
 
   attr_reader :color, :icon
-  attr_accessor :captured, :position
+  attr_accessor :captured, :position, :name
 
   def self.generate_pieces
     pieces = {}
@@ -129,12 +129,12 @@ class Piece
       if @color == "white"
         offsets = [-8]
         # if in starting position allow two moves forward
-        if @position[1] = "1"
+        if @position[1] == "2"
           offsets << -16
         end
-      else
+      elsif @color == "black"
         offsets = [8]
-        if @position[1] = "7"
+        if @position[1] == "7"
           offsets << 16
         end
       end

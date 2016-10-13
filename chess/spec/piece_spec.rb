@@ -123,6 +123,29 @@ describe Piece do
 
   end
 
+  describe Piece::Queen do
+
+    let(:queen) { Piece::Queen.new("white","d1") }
+
+    describe "#moves" do
+
+      it "accurately reflects all and only available moves" do
+        board.positions[:c2] = Piece::Pawn.new("white", "c2")
+        board.positions[:e2] = $blank
+        board.positions[:d2] = $blank
+        board.positions[:d7] = Piece::Pawn.new("black", "d7")
+        expect(queen.moves(board)).to include("g4")
+        expect(queen.moves(board)).to include("d3")
+        expect(queen.moves(board)).to include("d7")
+        expect(queen.moves(board)).not_to include("b3")
+        expect(queen.moves(board)).not_to include("e1")
+        expect(queen.moves(board)).not_to include("c2")
+      end
+
+    end
+
+  end
+
   describe Piece::Knight do
 
     let(:knight) { Piece::Knight.new("white", "d4") }
@@ -152,23 +175,68 @@ describe Piece do
 
   end
 
-  describe Piece::Queen do
+  describe Piece::Rook do
 
-    let(:queen) { Piece::Queen.new("white","d1") }
+    let(:rook) { Piece::Rook.new("white","a1") }
 
     describe "#moves" do
 
       it "accurately reflects all and only available moves" do
-        board.positions[:c2] = Piece::Pawn.new("white", "c2")
-        board.positions[:e2] = $blank
+        board.positions[:a5] = Piece::Pawn.new("black", "a5")
+        board.positions[:b1] = Piece::Bishop.new("white", "b1")
+        board.positions[:a2] = $blank
+        expect(rook.moves(board)).to include("a5")
+        expect(rook.moves(board)).to include("a3")
+        expect(rook.moves(board)).not_to include("b1")
+        expect(rook.moves(board)).not_to include("b2")
+      end
+
+    end
+
+  end
+
+  describe Piece::Bishop do
+
+    let(:bishop) { Piece::Bishop.new("white","c1") }
+
+    describe "#moves" do
+
+      it "accurately reflects all and only available moves" do
+        board.positions[:f4] = Piece::Pawn.new("black", "f4")
+        board.positions[:b2] = Piece::Pawn.new("white", "b2")
         board.positions[:d2] = $blank
-        board.positions[:d7] = Piece::Pawn.new("black", "d7")
-        expect(queen.moves(board)).to include("g4")
-        expect(queen.moves(board)).to include("d3")
-        expect(queen.moves(board)).to include("d7")
-        expect(queen.moves(board)).not_to include("b3")
-        expect(queen.moves(board)).not_to include("e1")
-        expect(queen.moves(board)).not_to include("c2")
+        expect(bishop.moves(board)).to include("f4")
+        expect(bishop.moves(board)).to include("d2")
+        expect(bishop.moves(board)).not_to include("a3")
+        expect(bishop.moves(board)).not_to include("b2")
+        expect(bishop.moves(board)).not_to include("b3")
+      end
+
+    end
+
+  end
+
+  describe Piece::Pawn do
+
+    let(:pawn) { Piece::Pawn.new("white","f2") }
+
+    describe "#moves" do
+
+      it "allows 2 tiles forward in starting position" do
+        pawn.name = "Crazy Pawn"
+        board.positions[:f3] = $blank
+        board.positions[:f4] = $blank
+        expect(pawn.moves(board)).to include("f3")
+        expect(pawn.moves(board)).to include("f4")
+        expect(pawn.moves(board)).not_to include("f5")
+      end
+
+      it "allows diagonal movement when capturing" do
+
+      end
+
+      it "allows only 1 tile forward when not in starting position" do
+
       end
 
     end
