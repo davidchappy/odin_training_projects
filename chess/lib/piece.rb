@@ -99,6 +99,7 @@ class Piece
     path_tiles
   end
 
+  # helper to ensure possible moves don't include wrapped tiles
   def wrapped?(next_tile, path_tiles)
     return false if path_tiles.empty? || path_tiles.nil?
     last_tile_letter = path_tiles.last[0]
@@ -115,6 +116,25 @@ class Piece
     end
   end
 
+  # helper that returns list of tiles matching key offsets or string if singular
+  def offsets_to_coordinates(offsets)
+    coordinates = []
+    all_coordinates = Board.tiles.keys
+    current_position_index = all_coordinates.index(@position.to_sym)
+
+    offsets.each do |offset|
+      adjusted_index = current_position_index + offset
+      tile = all_coordinates[adjusted_index].to_s if adjusted_index.between?(0,63)
+      coordinates << tile
+    end
+
+    if coordinates.length == 1
+      return coordinates[0]
+    else
+      return coordinates
+    end
+  end
+
   class Pawn < Piece
 
     def initialize(color, position="")
@@ -126,18 +146,32 @@ class Piece
     def moves(board)
       possible_moves = []
       offsets = []
+
+      # allow 2 movements forward at start and diagonal capturing
       if @color == "white"
-        offsets = [-8]
-        # if in starting position allow two moves forward
-        if @position[1] == "2"
-          offsets << -16
+        in_front = offsets_to_coordinates([-8])
+        two_in_front = offsets_to_coordinates([-16])
+        front_left = offsets_to_coordinates([-9])
+        front_right = offsets_to_coordinates([-7])
+        unless board.is_piece?(in_front)
+          offsets << -8
+          offsets << -16 if @position[1] == "2" && !board.is_piece?(two_in_front)
         end
+        offsets << -9 if !front_left.nil? && board.is_enemy?(front_left, "white")
+        offsets << -7 if !front_right.nil? && board.is_enemy?(front_right, "white")
       elsif @color == "black"
-        offsets = [8]
-        if @position[1] == "7"
-          offsets << 16
+        in_front = offsets_to_coordinates([8])
+        two_in_front = offsets_to_coordinates([16])
+        front_left = offsets_to_coordinates([9])
+        front_right = offsets_to_coordinates([7])
+        unless board.is_piece?(in_front)
+          offsets << 8
+          offsets << 16 if @position[1] == "7" && !board.is_piece?(two_in_front)
         end
+        offsets << 9 if !front_left.nil? && board.is_enemy?(front_left, "black")
+        offsets << 7 if !front_right.nil? && board.is_enemy?(front_right, "black")
       end
+
       legal_moves = generate_adjacent_tiles(offsets)
       legal_moves.each { |move| possible_moves << move unless board.obstructed?(move, @color) }
       possible_moves

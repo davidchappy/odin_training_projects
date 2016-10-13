@@ -221,6 +221,7 @@ describe Piece do
     describe "#moves" do
 
       let(:pawn) { Piece::Pawn.new("white","f2") }
+      let(:black_pawn) { Piece::Pawn.new("black","f7") }
 
       it "allows 2 tiles forward in starting position" do
         board.positions[:f3] = $blank
@@ -230,16 +231,40 @@ describe Piece do
         expect(pawn.moves(board)).not_to include("f5")
       end
 
-      it "allows diagonal movement when capturing" do
-
-      end
-
       it "allows only 1 tile forward when not in starting position" do
         pawn = Piece::Pawn.new("white","g3")
         board.positions[:g4] = $blank
         board.positions[:g5] = $blank
         expect(pawn.moves(board)).to include("g4")
         expect(pawn.moves(board)).not_to include("g5")
+      end
+
+      it "does not allow forward movement into an enemy-occupied tile" do
+        board.positions[:f3] = Piece::Queen.new("black","f3")
+        board.positions[:g3] = $blank
+        expect(pawn.moves(board)).not_to include("f3")
+      end
+
+      it "allows diagonal movement when capturing" do
+        board.positions[:g3] = Piece::Queen.new("black","g3")
+        board.positions[:e3] = Piece::Pawn.new("white","e3")
+        board.positions[:f3] = $blank
+        expect(pawn.moves(board)).to include("f3")
+        expect(pawn.moves(board)).to include("g3")
+        expect(pawn.moves(board)).not_to include("e3")
+      end
+
+      it "works correctly for both black and white" do
+        board.positions[:f6] = $blank
+        board.positions[:f5] = $blank
+        board.positions[:g6] = Piece::Queen.new("white","g6")
+        board.positions[:e6] = Piece::Pawn.new("black","e6")
+        expect(black_pawn.moves(board)).to include("f5")
+        expect(black_pawn.moves(board)).to include("f6")
+        expect(black_pawn.moves(board)).to include("g6")
+        expect(black_pawn.moves(board)).not_to include("e6")
+        expect(black_pawn.moves(board)).not_to include("e7")
+        expect(black_pawn.moves(board)).not_to include("f4")
       end
 
     end
