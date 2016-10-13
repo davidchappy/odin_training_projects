@@ -15,15 +15,14 @@ class Game
     @player2 = Player.new(2, "black", "Kristin")
     @current_player = set_starting_player
     @board = Board.new
-    # puts @board.positions
     # Board.tiles.keys.each_with_index do |key,index|
     #   puts "Key: #{key}; Index: #{index}"
     # end
   end
 
   def process_turns
+    GameIO.print_board(@board.board)
     until check_mate?
-      GameIO.print_board(@board.board)
       if check?
         move = @current_player.take_turn(@board, true)
         GameIO.print_turn_update(@current_player, move, @board, true)
@@ -32,6 +31,7 @@ class Game
         GameIO.print_turn_update(@current_player, move, @board)
       end
       @board.update_board(move)
+      GameIO.print_board(@board.board)
       @current_player = switch_players(@current_player)
     end
     GameIO.print_board(@board.board)

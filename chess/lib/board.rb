@@ -58,7 +58,7 @@ class Board
     board << top_border
     # add rows to board and merge tiles
     8.downto(1) do |num|
-      board << "#{num.to_s.colorize(:white)} " + merge_tiles_with_board("a".upto("h").to_a.reverse, num, v_line) + v_line
+      board << "#{num.to_s.colorize(:white)} " + merge_tiles_with_board("a".upto("h").to_a, num, v_line) + v_line
       unless num == 1
         board << "  #{left_join}" + spawn(spawn(h_line, 3) + cross, 7) + spawn(h_line, 3) + right_join
       end
@@ -84,6 +84,7 @@ class Board
     start_position = move[0]
     piece = find_piece(start_position)
     destination = move[1]
+    piece.position = destination
     @positions[start_position.to_sym] = $blank
     @positions[destination.to_sym] = piece
     @board = generate_board
