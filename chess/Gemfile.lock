@@ -2,14 +2,12 @@ GEM
   remote: https://rubygems.org/
   specs:
     colorize (0.8.1)
-    magic_encoding (0.0.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   colorize
-  magic_encoding
 
 BUNDLED WITH
    1.13.0

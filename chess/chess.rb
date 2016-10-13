@@ -9,13 +9,12 @@ require './lib/piece.rb'
 require 'colorize'
 
 $blank = " "
-# puts String.colors
 
-if !ARGV[0].nil? && ARGV[0].downcase == "start"
+if !ARGV[0].nil? && (ARGV[0].downcase == "start" || ARGV[0].downcase == "s")
   Game.start
   ARGV.clear
   STDOUT.flush
-elsif !ARGV[0].nil?
-  puts "Please include 'start' like this: 'ruby [file-name] start'"
+else
+  puts "Please include 'start' like this: 'ruby chess.rb start'"
 end
 
