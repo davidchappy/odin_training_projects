@@ -29,12 +29,13 @@ class Game
       else
         move = @current_player.take_turn(@board)
       end
+      GameIO.print_turn_update(@current_player, move, @board)
       @board.update_board(move)
       GameIO.print_board(@board.board)
-      GameIO.print_turn_update(@current_player, move, @board)
       GameIO.print_captured(@board.captured)
       @current_player = switch_players(@current_player)
     end
+    GameIO.print_board(@board.board)
     GameIO.print_finish(switch_players)
     start_again
   end
