@@ -14,8 +14,10 @@ class Player
 
     GameIO.give_output("It's #{@name}'s (#{@color}) turn.\nChoose a valid piece and destination separated by a comma (ex: a2,a3): ", "print")
     move = GameIO.get_input.split(",").collect!{|x| x.strip || x }
+    # if move
     target = move[0]
     destination = move[1]
+    p move
     case
     when !board.valid_tile?(target)
       GameIO.give_output("Sorry, that coordinate is not on the board.")
@@ -30,8 +32,8 @@ class Player
       GameIO.give_output("Sorry, that's not a possible move for that piece.")
       take_turn(board)
     else
+      return move
     end
-    return move
   end
 
 end
