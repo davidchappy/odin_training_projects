@@ -1,4 +1,4 @@
-require './chess.rb'
+require 'spec_helper'
 
 describe GameIO do
     describe ".give_output" do

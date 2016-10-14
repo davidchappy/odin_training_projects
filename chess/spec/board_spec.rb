@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require './chess.rb'
+require 'spec_helper'
 
 describe Board do
 
@@ -196,6 +196,19 @@ describe Board do
       queen = board.promote(black_pawn)
       board.positions[:c1] = queen
       expect(board.positions[:c1]).to be_a(Piece::Queen)
+    end
+
+  end
+
+  describe "#en_passant?" do
+    
+    let(:white_pawn) { Piece::Pawn.new("white", "f5") }
+    let(:black_pawn) { Piece::Pawn.new("black", "g5") }
+
+    it "returns true if a pawn is able to perform en_passant" do
+      board.positions[:f5] = white_pawn
+      board.positions[:g5] = black_pawn
+      expect(board.en_passant?(white_pawn)).to eq(true)
     end
 
   end

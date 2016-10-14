@@ -141,8 +141,10 @@ class Piece
     def moves(board)
       possible_moves = []
       offsets = []
+      left = offsets_to_coordinates([-1])
+      right = offsets_to_coordinates([1])
 
-      # allow 2 movements forward at start and diagonal capturing
+      # allow 2 movements forward at start, diagonal capturing, and en_passant
       if @color == "white"
         in_front = offsets_to_coordinates([-8])
         two_in_front = offsets_to_coordinates([-16])
@@ -154,6 +156,11 @@ class Piece
         end
         offsets << -9 if !front_left.nil? && board.is_enemy?(front_left, "white")
         offsets << -7 if !front_right.nil? && board.is_enemy?(front_right, "white")
+        if board.en_passant?(self)
+          GameIO.give_output("Notice: #{@color} can perform en_passant.")
+          offsets << -1 if !left.nil? && board.is_enemy?(left, "white")
+          offsets << 1 if !right.nil? && board.is_enemy?(right, "white")
+        end
       elsif @color == "black"
         in_front = offsets_to_coordinates([8])
         two_in_front = offsets_to_coordinates([16])
@@ -165,6 +172,11 @@ class Piece
         end
         offsets << 9 if !front_left.nil? && board.is_enemy?(front_left, "black")
         offsets << 7 if !front_right.nil? && board.is_enemy?(front_right, "black")
+        if board.en_passant?(self)
+          GameIO.give_output("Notice: #{@color} can perform en_passant.")
+          offsets << -1 if !left.nil? && board.is_enemy?(left, "black")
+          offsets << 1 if !right.nil? && board.is_enemy?(right, "black")
+        end
       end
 
       legal_moves = generate_adjacent_tiles(offsets)

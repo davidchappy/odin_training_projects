@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require './chess.rb'
+require 'spec_helper'
 
 describe ChessHelpers do
 

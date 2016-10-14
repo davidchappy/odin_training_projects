@@ -1,4 +1,4 @@
-require './chess.rb'
+require 'spec_helper'
 
 describe Piece do
 
@@ -220,38 +220,38 @@ describe Piece do
 
     describe "#moves" do
 
-      let(:pawn) { Piece::Pawn.new("white","f2") }
+      let(:white_pawn) { Piece::Pawn.new("white","f2") }
       let(:black_pawn) { Piece::Pawn.new("black","f7") }
 
       it "allows 2 tiles forward in starting position" do
         board.positions[:f3] = $blank
         board.positions[:f4] = $blank
-        expect(pawn.moves(board)).to include("f3")
-        expect(pawn.moves(board)).to include("f4")
-        expect(pawn.moves(board)).not_to include("f5")
+        expect(white_pawn.moves(board)).to include("f3")
+        expect(white_pawn.moves(board)).to include("f4")
+        expect(white_pawn.moves(board)).not_to include("f5")
       end
 
       it "allows only 1 tile forward when not in starting position" do
-        pawn = Piece::Pawn.new("white","g3")
+        white_pawn = Piece::Pawn.new("white","g3")
         board.positions[:g4] = $blank
         board.positions[:g5] = $blank
-        expect(pawn.moves(board)).to include("g4")
-        expect(pawn.moves(board)).not_to include("g5")
+        expect(white_pawn.moves(board)).to include("g4")
+        expect(white_pawn.moves(board)).not_to include("g5")
       end
 
       it "does not allow forward movement into an enemy-occupied tile" do
         board.positions[:f3] = Piece::Queen.new("black","f3")
         board.positions[:g3] = $blank
-        expect(pawn.moves(board)).not_to include("f3")
+        expect(white_pawn.moves(board)).not_to include("f3")
       end
 
       it "allows diagonal movement when capturing" do
         board.positions[:g3] = Piece::Queen.new("black","g3")
         board.positions[:e3] = Piece::Pawn.new("white","e3")
         board.positions[:f3] = $blank
-        expect(pawn.moves(board)).to include("f3")
-        expect(pawn.moves(board)).to include("g3")
-        expect(pawn.moves(board)).not_to include("e3")
+        expect(white_pawn.moves(board)).to include("f3")
+        expect(white_pawn.moves(board)).to include("g3")
+        expect(white_pawn.moves(board)).not_to include("e3")
       end
 
       it "works correctly for both black and white" do
@@ -265,6 +265,16 @@ describe Piece do
         expect(black_pawn.moves(board)).not_to include("e6")
         expect(black_pawn.moves(board)).not_to include("e7")
         expect(black_pawn.moves(board)).not_to include("f4")
+      end
+
+      it "recognizes en passant moves" do
+        allow(GameIO).to receive(:give_output).and_return("")
+        white_pawn.position = "f5"
+        board.positions[:f5] = white_pawn
+        black_pawn.position = "g5"
+        board.positions[:g5] = black_pawn
+        expect(board.en_passant?(white_pawn)).to eq(true)
+        expect(white_pawn.moves(board)).to include("g5")
       end
 
     end

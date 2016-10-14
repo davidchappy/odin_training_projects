@@ -15,6 +15,6 @@ if !ARGV[0].nil? && (ARGV[0].downcase == "start" || ARGV[0].downcase == "s")
   ARGV.clear
   STDOUT.flush
 else
-  puts "Please include 'start' like this: 'ruby chess.rb start'"
+  GameIO.give_output("Please include 'start' like this: 'ruby chess.rb start'")
 end
 

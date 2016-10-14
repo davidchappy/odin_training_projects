@@ -182,4 +182,19 @@ class Board
     promoted_piece
   end
 
+  def en_passant?(pawn)
+    col_as_num = pawn.position[0].ord
+    row = pawn.position[1]
+    right_position = "#{(col_as_num+1).chr}#{row}"
+    left_position = "#{(col_as_num-1).chr}#{row}"
+    if pawn.color == "white" && row == "5"
+      return true if !@positions[right_position.to_sym].nil? && is_enemy?(right_position, pawn.color) 
+      return true if !@positions[left_position.to_sym].nil? && is_enemy?(left_position, pawn.color) 
+    elsif pawn.color == "black" && row == "4"
+      return true if !@positions[right_position.to_sym].nil? && is_enemy?(right_position, pawn.color) 
+      return true if !@positions[left_position.to_sym].nil? && is_enemy?(left_position, pawn.color) 
+    end
+    false
+  end
+
 end
