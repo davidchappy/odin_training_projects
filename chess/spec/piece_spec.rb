@@ -274,7 +274,7 @@ describe Piece do
         black_pawn.position = "g5"
         board.positions[:g5] = black_pawn
         expect(board.en_passant?(white_pawn)).to eq(true)
-        expect(white_pawn.moves(board)).to include("g5")
+        expect(white_pawn.moves(board)).to include("g6")
       end
 
     end

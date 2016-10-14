@@ -183,16 +183,56 @@ class Board
   end
 
   def en_passant?(pawn)
-    col_as_num = pawn.position[0].ord
-    row = pawn.position[1]
-    right_position = "#{(col_as_num+1).chr}#{row}"
-    left_position = "#{(col_as_num-1).chr}#{row}"
-    if pawn.color == "white" && row == "5"
-      return true if !@positions[right_position.to_sym].nil? && is_enemy?(right_position, pawn.color) 
-      return true if !@positions[left_position.to_sym].nil? && is_enemy?(left_position, pawn.color) 
-    elsif pawn.color == "black" && row == "4"
-      return true if !@positions[right_position.to_sym].nil? && is_enemy?(right_position, pawn.color) 
-      return true if !@positions[left_position.to_sym].nil? && is_enemy?(left_position, pawn.color) 
+    if pawn.class == Piece::Pawn
+      col_as_num = pawn.position[0].ord
+      row = pawn.position[1]
+      right_position = "#{(col_as_num+1).chr}#{row}"
+      left_position = "#{(col_as_num-1).chr}#{row}"
+      if pawn.color == "white" && row == "5"
+        return true if !@positions[right_position.to_sym].nil? && is_enemy?(right_position, pawn.color) 
+        return true if !@positions[left_position.to_sym].nil? && is_enemy?(left_position, pawn.color) 
+      elsif pawn.color == "black" && row == "4"
+        return true if !@positions[right_position.to_sym].nil? && is_enemy?(right_position, pawn.color) 
+        return true if !@positions[left_position.to_sym].nil? && is_enemy?(left_position, pawn.color) 
+      end
+    end
+    false
+  end
+
+  # checks if move is en passant; clears spot where enemy was, adds enemy to captured
+  def process_en_passant(move)
+    destination = move[1]
+    piece = @positions[move[0].to_sym]
+    col_as_num = piece.position[0].ord
+    row = piece.position[1]
+    right = "#{(col_as_num+1).chr}#{row}"
+    left = "#{(col_as_num-1).chr}#{row}"
+    if piece.color == "white"
+      upper_left = "#{(col_as_num-1).chr}#{(row.to_i + 1).to_s}"
+      upper_right = "#{(col_as_num+1).chr}#{(row.to_i + 1).to_s}"
+      if destination == upper_left 
+        @captured << @positions[left.to_sym]
+        @positions[left.to_sym].position = ""
+        @positions[left.to_sym] = $blank
+      elsif destination == upper_right
+        @captured << @positions[right.to_sym]
+        @positions[right.to_sym].position = ""
+        @positions[right.to_sym] = $blank
+      end
+      return true
+    else 
+      lower_left = "#{(col_as_num-1).chr}#{(row.to_i - 1).to_s}"
+      lower_right = "#{(col_as_num+1).chr}#{(row.to_i - 1).to_s}"
+      if destination == lower_left 
+        @captured << @positions[left.to_sym]
+        @positions[left.to_sym].position = ""
+        @positions[left.to_sym] = $blank
+      elsif destination == lower_right
+        @captured << @positions[right.to_sym]
+        @positions[right.to_sym].position = ""
+        @positions[right.to_sym] = $blank
+      end
+      return true
     end
     false
   end

@@ -15,10 +15,10 @@ class Game
     @player2 = Player.new(2, "black", "Kristin")
     @current_player = set_starting_player
     @board = Board.new
-    GameIO.print_board(@board.board)
   end
 
   def process_turns
+    GameIO.print_board(@board.board)
     loop do
       # p @board
       if check?
@@ -28,6 +28,9 @@ class Game
         move = @current_player.take_turn(@board)
       end
       GameIO.print_turn_update(@current_player, move, @board)
+      if en_passant?(@board.positions[move.to_sym])
+        process_en_passant(move)
+      end
       @board.update_board(move)
       if check_mate?
         GameIO.print_finish(switch_players)

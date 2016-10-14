@@ -213,4 +213,21 @@ describe Board do
 
   end
 
+  describe "#process_en_passant" do
+
+    let(:white_pawn) { Piece::Pawn.new("white", "f5") }
+    let(:black_pawn) { Piece::Pawn.new("black", "g5") }
+
+    it "moves attacking pawn diagonally and captures lateral pawn" do
+      board.positions[:f5] = white_pawn
+      board.positions[:g5] = black_pawn
+      move = ["f5", "g6"]
+      board.process_en_passant(move)
+      expect(board.positions[:g5]).to eq($blank)
+      expect(board.captured[0].position).to eq("")
+      expect(board.captured.length).to eq(1)
+    end
+
+  end
+
 end
