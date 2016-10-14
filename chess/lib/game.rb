@@ -15,11 +15,11 @@ class Game
     @player2 = Player.new(2, "black", "Kristin")
     @current_player = set_starting_player
     @board = Board.new
+    GameIO.print_board(@board.board)
   end
 
   def process_turns
-    GameIO.print_board(@board.board)
-    until check_mate?
+    loop do
       # p @board
       if check?
         GameIO.print_check(@current_player, @board.king_safe_tiles(@current_player, switch_players))
@@ -29,13 +29,15 @@ class Game
       end
       GameIO.print_turn_update(@current_player, move, @board)
       @board.update_board(move)
+      if check_mate?
+        GameIO.print_finish(switch_players)
+        start_again
+      end
       GameIO.print_board(@board.board)
       GameIO.print_captured(@board.captured)
       @current_player = switch_players(@current_player)
     end
-    GameIO.print_board(@board.board)
-    GameIO.print_finish(switch_players)
-    start_again
+    # GameIO.print_board(@board.board)
   end
 
   def set_starting_player
