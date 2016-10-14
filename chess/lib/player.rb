@@ -29,11 +29,12 @@ class Player
     when !board.positions[target.to_sym].possible_move?(destination, board)
       GameIO.give_output("Sorry, that's not a possible move for that piece.")
       take_turn(board)
-    when board.is_enemy?(destination, self.color)
-      board.positions[destination.to_sym].captured = true
     else
+      if board.is_enemy?(destination, self.color)
+        board.captured << board.positions[destination.to_sym]
+      end
+      return move
     end
-    return move
   end
 
 end

@@ -2,12 +2,13 @@
 class Board
   include ChessHelpers
 
-  attr_accessor :board, :positions
+  attr_accessor :board, :positions, :captured
 
   def initialize
     @@tiles = generate_tiles
     @positions = add_pieces_to_tiles(@@tiles)
     @board = generate_board  
+    @captured = []
   end
 
   def positions=positions

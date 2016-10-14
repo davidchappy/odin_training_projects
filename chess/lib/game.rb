@@ -32,6 +32,7 @@ class Game
       end
       @board.update_board(move)
       GameIO.print_board(@board.board)
+      GameIO.print_captured(@board.captured)
       @current_player = switch_players(@current_player)
     end
     GameIO.print_board(@board.board)

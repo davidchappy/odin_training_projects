@@ -33,6 +33,7 @@ describe Player do
     before(:each) do
       allow(GameIO).to receive(:give_output)
       allow(GameIO).to receive(:get_input).and_return("a2,a3")
+      allow(GameIO).to receive(:get_input).and_return("a2,b3")
     end
 
     it "requests a player's move as an array of 2 coordinates" do 
@@ -62,6 +63,14 @@ describe Player do
       expect(GameIO).to receive(:get_input).and_return("a2,a3")
       piece = board.positions[move[0].to_sym]
       expect(piece.possible_move?(move[1], board)).to be(true)
+    end
+
+    it "if destination is enemy piece, adds it to captured variable" do
+      expect(GameIO).to receive(:give_output).with("It's #{player.name}'s (#{player.color}) turn.\nChoose a valid piece and destination separated by a comma (ex: a2,a3): ", "print").and_return("")
+      expect(GameIO).to receive(:get_input).and_return("a2,b3")
+      board.positions[:b3] = Piece::Pawn.new("black", "b3")
+      move
+      expect(board.captured.length).to eq(1)
     end
 
   end
