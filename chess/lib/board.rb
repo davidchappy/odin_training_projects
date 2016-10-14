@@ -97,6 +97,11 @@ class Board
     piece.position = destination
     @positions[start_position.to_sym] = $blank
     @positions[destination.to_sym] = piece
+    if promotable?(piece)
+      piece = promote(piece) 
+      piece.position = destination
+      @positions[destination.to_sym] = piece
+    end
     @board = generate_board
   end
 
@@ -154,6 +159,27 @@ class Board
       end
     end
     safe_tiles.compact
+  end
+
+  def promotable?(piece)
+    if  (piece.class == Piece::Pawn) && 
+        (@captured.length > 0) &&
+        (@captured.select{|p| p if p.color == piece.color}.length > 0)
+        if piece.color == "white" 
+          return true if piece.position[-1] == "8"
+        else
+          return true if piece.position[-1] == "1"
+        end
+    end
+    false
+  end
+
+  def promote(piece)
+    current_player_captures = @captured.select{|p| p if p.color == piece.color}
+    GameIO.print_promotion(current_player_captures)
+    input = GameIO.get_input.to_i - 1
+    promoted_piece = current_player_captures[input]
+    promoted_piece
   end
 
 end

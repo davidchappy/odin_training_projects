@@ -64,4 +64,12 @@ class GameIO
     self.give_output(output)
   end
 
+  def self.print_promotion(captures)
+    output = "Please choose a captured piece to promote by its number in the list below:\n"
+    captures.each_with_index do |capture,index|
+      output += (index + 1).to_s + ": " + capture.name + "\n"
+    end
+    GameIO.give_output(output)
+  end
+
 end

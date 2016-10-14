@@ -149,4 +149,55 @@ describe Board do
 
   end
 
+  describe "#promotable?" do
+
+    let(:pawn) { Piece::Pawn.new("white", "") }
+
+    before do
+      board.captured << Piece::Queen.new("white", "")
+      board.captured << Piece::Rook.new("white", "")
+    end
+
+    it "returns true if a pawn can be promoted" do
+      pawn.position = "c8"
+      board.positions[:c8] = pawn
+      expect(board.promotable?(pawn)).to eq(true)
+    end
+
+    it "returns false if pawn has not reached the final row" do
+      pawn.position = "c7"
+      board.positions[:c7] = pawn
+      expect(board.promotable?(pawn)).to eq(false)
+    end
+
+  end
+
+  describe "#promote" do
+
+    let(:white_pawn) { Piece::Pawn.new("white", "") }
+    let(:black_pawn) { Piece::Pawn.new("black", "") }
+
+    before(:each) do
+      allow(GameIO).to receive(:print_promotion).and_return("")
+      allow(GameIO).to receive(:get_input).and_return("1")
+    end
+
+    it "replaces a promoted pawn with a captured piece" do
+      board.captured << Piece::Queen.new("white", "")
+      board.captured << Piece::Rook.new("white", "")
+      queen = board.promote(white_pawn)
+      board.positions[:c8] = queen
+      expect(board.positions[:c8]).to be_a(Piece::Queen)
+    end
+
+    it "works for both colors" do
+      board.captured << Piece::Queen.new("black", "")
+      board.captured << Piece::Rook.new("black", "")
+      queen = board.promote(black_pawn)
+      board.positions[:c1] = queen
+      expect(board.positions[:c1]).to be_a(Piece::Queen)
+    end
+
+  end
+
 end
