@@ -29,13 +29,12 @@ class Game
       else
         move = @current_player.take_turn(@board)
       end
-      GameIO.print_turn_update(@current_player, move, @board)
       @board.update_board(move)
       GameIO.print_board(@board.board)
+      GameIO.print_turn_update(@current_player, move, @board)
       GameIO.print_captured(@board.captured)
       @current_player = switch_players(@current_player)
     end
-    GameIO.print_board(@board.board)
     GameIO.print_finish(switch_players)
     start_again
   end
@@ -65,8 +64,6 @@ class Game
     king = @board.get_player_pieces(@current_player).select{|p| p if p.name == "king"}[0]
     legal_moves = king.moves(@board).compact
     safe_moves = @board.king_safe_tiles(@current_player, switch_players).compact
-    p legal_moves
-    p safe_moves
     if legal_moves.length > 0 && safe_moves.length == 0
       return true
     end

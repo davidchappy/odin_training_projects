@@ -60,7 +60,7 @@ class GameIO
   end
 
   def self.print_finish(winner)
-    output = "Game over! #{winner} wins!"
+    output = "Game over! #{winner.name} wins!"
     self.give_output(output)
   end
 
