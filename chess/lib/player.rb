@@ -12,9 +12,17 @@ class Player
   def take_turn(board, check=false, king_safe_tiles=nil)
     move = []
 
+    # get valid move input from player or repeat take_turn
     GameIO.give_output("It's #{@name}'s (#{@color}) turn.\nChoose a valid piece and destination separated by a comma (ex: a2,a3): ", "print")
-    move = GameIO.get_input.split(",").collect!{|x| x.strip || x }
-    # if move
+    input = GameIO.get_input
+    if input =~ /^[a-h][1-8],\s*[a-h][1-8]$/
+      move = input.split(",").collect!{|x| x.strip || x }
+    else 
+      GameIO.give_output("Please type 2 letter/number coordinates separated by a comma (ex: d3,e4).")
+      return take_turn(board)
+    end
+
+    # validate move
     target = move[0]
     destination = move[1]
     case
@@ -31,6 +39,10 @@ class Player
       GameIO.give_output("Sorry, that's not a possible move for that piece.")
       take_turn(board)
     else
+      # update piece's position variable to match new location
+      piece = board.positions[target.to_sym]
+      piece.position = destination
+      # if enemy is targetted, add to board.captured variable
       if board.is_enemy?(destination, self.color)
         board.captured << board.positions[destination.to_sym]
       end

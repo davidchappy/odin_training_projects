@@ -11,11 +11,6 @@ class Board
     @captured = []
   end
 
-  def positions=positions
-    @positions = positions
-    @board = generate_board
-  end
-
   def self.tiles
     @@tiles
   end
