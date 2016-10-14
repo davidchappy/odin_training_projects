@@ -19,8 +19,28 @@ class GameIO
     self.get_input
   end
 
-  def self.print_board(board)
-    self.give_output(board)
+  def self.print_board(board_output)
+    self.give_output(board_output)
+  end
+
+  def self.print_captured(captured)
+    if captured.length >= 1 
+      output = ["Captured pieces: "]
+      if captured.select{|p| p if p.color == "white"}.length >= 1
+        white = captured.select{|p| p if p.color == "white"}
+        output << "White: "
+        white.each {|p| output[1] += p.name + ", " unless p.nil?}
+        output[1] = output[1].chomp(", ")
+      end
+      if captured.select{|p| p if p.color == "black"}.length >= 1
+        black = captured.select{|p| p if p.color == "black"}
+        output << "Black: "
+        black.each {|p| output[-1] += p.name + ", " unless p.nil?}
+        output[-1] = output[-1].chomp(", ")
+      end
+      self.give_output(output)
+      output.join("\n")
+    end
   end
 
   def self.print_turn_update(player, move, board, check=false)
@@ -29,7 +49,5 @@ class GameIO
     output = "#{player.name} moved #{piece.name} to #{destination}"
     self.give_output(output)
   end
-
-
 
 end

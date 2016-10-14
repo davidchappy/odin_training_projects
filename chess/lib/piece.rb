@@ -42,7 +42,6 @@ class Piece
 
   def initialize(color, position="")
     @color = color
-    @captured = false
     @position = position
     @icon = " "
   end
