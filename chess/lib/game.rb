@@ -15,15 +15,12 @@ class Game
     @player2 = Player.new(2, "black", "Kristin")
     @current_player = set_starting_player
     @board = Board.new
-    # Board.tiles.keys.each_with_index do |key,index|
-    #   puts "Key: #{key}; Index: #{index}"
-    # end
   end
 
   def process_turns
     GameIO.print_board(@board.board)
     until check_mate?
-      p @board
+      # p @board
       if check?
         GameIO.print_check(@current_player, @board.king_safe_tiles(@current_player, switch_players))
         move = @current_player.take_turn(@board, true, @board.king_safe_tiles(@current_player, switch_players))
@@ -50,24 +47,34 @@ class Game
   end
 
   def check?
+    return true if king_attackers.length > 0
+    false
+  end
+
+  # return array of pieces placing the king in check
+  def king_attackers
+    attackers = []    
     king = @board.get_player_pieces(@current_player).select{|p| p if p.name == "king"}[0]
     other_player_pieces = @board.get_player_pieces(switch_players)
     other_player_pieces.each do |piece|
       piece.moves(@board).compact.each do |move|
         if @board.is_piece?(move) && @board.positions[move.to_sym] == king
-          return true
+          attackers << @board.positions[piece.position.to_sym]
         end
       end
     end
-    false
+    attackers
   end
 
   def check_mate?
     king = @board.get_player_pieces(@current_player).select{|p| p if p.name == "king"}[0]
     legal_moves = king.moves(@board).compact
     safe_moves = @board.king_safe_tiles(@current_player, switch_players).compact
-    if legal_moves.length > 0 && safe_moves.length == 0
-      return true
+    
+    if  king_attackers.length > 0 &&
+        safe_moves.length == 0 && 
+        legal_moves.length > 0 
+        return true 
     end
     false
   end

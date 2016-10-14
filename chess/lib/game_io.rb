@@ -45,9 +45,14 @@ class GameIO
 
   def self.print_check(current_player, king_safe_tiles, stdout=$stdout)
     output = ["#{current_player.name} is in check!"]
-    output << "Safe moves: "
-    king_safe_tiles.each {|tile| output[1] += tile.to_s + ", " unless tile.nil? } 
-    output[1] = output[1].chomp(", ")
+    if king_safe_tiles.compact.length == 0
+      output = "You're king cannot move. Try block or capturing your attacker."
+    else
+      output << "Safe moves: "
+      king_safe_tiles.each {|tile| output[1] += tile.to_s + ", " unless tile.nil? } 
+      output[1] = output[1].chomp(", ")
+      output[2] = "Either move to a safe tile or block/capture the attacker."
+    end
     self.give_output(output, "puts", stdout)
     output
   end
