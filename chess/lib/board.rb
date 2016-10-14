@@ -121,4 +121,30 @@ class Board
     piece = positions[coordinate.to_sym]
   end
 
+  def get_player_pieces(current_player)
+    pieces = []
+    @positions.keys.each do |key|
+      if is_piece?(key.to_s) && @positions[key].color == current_player.color
+        pieces << @positions[key]
+      end
+    end
+    pieces
+  end
+
+  # returns array of tiles where King can move safely without being in check
+  def king_safe_tiles(current_player, other_player)
+    safe_tiles = []
+    player_pieces = get_player_pieces(current_player)
+    other_player_pieces = get_player_pieces(other_player)
+    king = player_pieces.select{|p| p if p.name == "king"}[0]
+    safe_tiles = king.moves(self)
+    other_player_pieces.each do |piece|
+      # puts "Piece: #{piece.color} #{piece.name}\nMoves: #{piece.moves(self)}\n" 
+      piece.moves(self).compact.each do |move|
+        safe_tiles.delete(move) if safe_tiles.include?(move)
+      end
+    end
+    safe_tiles.compact
+  end
+
 end

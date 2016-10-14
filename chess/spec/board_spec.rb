@@ -4,6 +4,7 @@ require './chess.rb'
 describe Board do
 
   let(:board) { Board.new }
+  let(:game) { Game.new }
 
   describe "#generate_tiles" do
 
@@ -120,6 +121,32 @@ describe Board do
       expect(board.open_tile?("e6")).to be(true)
       expect(board.open_tile?("d8")).to be(false)
     end
+  end
+
+  describe "#get_player_pieces" do
+
+    it "returns an array of given player's pieces" do
+      expect(board.get_player_pieces(game.current_player)).to be_a(Array)
+      expect(board.get_player_pieces(game.current_player)).to include(Piece::Pawn)
+      expect(board.get_player_pieces(game.current_player)).to include(Piece::Queen)
+    end
+
+  end
+
+  describe "#king_safe_tiles" do
+
+    let(:safe_tiles) { board.king_safe_tiles(game.current_player, game.switch_players(game.current_player)) }
+
+    it "returns array of safe tiles for current_player's king" do
+      game.current_player = game.player1
+      board.positions[:d2] = $blank
+      board.positions[:e2] = $blank
+      board.positions[:e1] = Piece::King.new("white", "e1")
+      board.positions[:c3] = Piece::Queen.new("black", "c3")
+      expect(safe_tiles).to include("e2")
+      expect(safe_tiles.length).to eq(1)
+    end
+
   end
 
 end

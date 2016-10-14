@@ -94,7 +94,6 @@ class Piece
         i += 1
       end
     end
-    # p path_tiles
     path_tiles
   end
 
@@ -103,9 +102,6 @@ class Piece
     return false if path_tiles.empty? || path_tiles.nil?
     last_tile_letter = path_tiles.last[0]
     next_tile_letter = next_tile[0]
-    # puts "Starting wrapped? output"
-    # p path_tiles
-    # p next_tile
     if next_tile_letter == "h" && last_tile_letter == "a"
       return true
     elsif next_tile_letter == "a" && last_tile_letter == "h"
@@ -184,7 +180,6 @@ class Piece
       super
       @name = "rook"
       @icon = get_icon(@color, @name)
-      # temporary, for tests
     end
 
     def moves(board)

@@ -2,8 +2,8 @@
 class Game
   include ChessHelpers
 
-  attr_reader :board, :player1, :player2
-  attr_accessor :current_player
+  attr_reader :player1, :player2
+  attr_accessor :current_player, :board
 
   def self.start
     @game = Game.new
@@ -24,18 +24,19 @@ class Game
     GameIO.print_board(@board.board)
     until check_mate?
       if check?
-        move = @current_player.take_turn(@board, true)
-        GameIO.print_turn_update(@current_player, move, @board, true)
+        GameIO.print_check(@current_player, @board.king_safe_tiles(@current_player, switch_players))
+        move = @current_player.take_turn(@board, true, @board.king_safe_tiles(@current_player, switch_players))
       else
         move = @current_player.take_turn(@board)
-        GameIO.print_turn_update(@current_player, move, @board)
       end
+      GameIO.print_turn_update(@current_player, move, @board)
       @board.update_board(move)
       GameIO.print_board(@board.board)
       GameIO.print_captured(@board.captured)
       @current_player = switch_players(@current_player)
     end
     GameIO.print_board(@board.board)
+    GameIO.print_finish(switch_players)
     start_again
   end
 
@@ -48,11 +49,38 @@ class Game
   end
 
   def check?
+    king = @board.get_player_pieces(@current_player).select{|p| p if p.name == "king"}[0]
+    other_player_pieces = @board.get_player_pieces(switch_players)
+    other_player_pieces.each do |piece|
+      piece.moves(@board).compact.each do |move|
+        if @board.is_piece?(move) && @board.positions[move.to_sym] == king
+          return true
+        end
+      end
+    end
     false
   end
 
   def check_mate?
+    king = @board.get_player_pieces(@current_player).select{|p| p if p.name == "king"}[0]
+    legal_moves = king.moves(@board).compact
+    safe_moves = @board.king_safe_tiles(@current_player, switch_players).compact
+    p legal_moves
+    p safe_moves
+    if legal_moves.length > 0 && safe_moves.length == 0
+      return true
+    end
     false
+  end
+
+  def start_again
+    GameIO.give_output("Play again? (y/N) ")
+    play_again = GameIO.get_input.downcase 
+    if play_again == "y"
+      Game.start 
+    else
+      exit
+    end
   end
 
 end

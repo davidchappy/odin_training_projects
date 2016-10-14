@@ -28,4 +28,23 @@ describe Game do
 
   end
 
+  describe "#check?" do
+
+    let(:board) do
+      board = Board.new
+      board.positions[:e1] = Piece::King.new("white", "e1")
+      board.positions[:d2] = $blank
+      board.positions[:e2] = $blank
+      board.positions[:c3] = Piece::Queen.new("black", "c3") 
+      board
+    end
+
+    it "returns true if other player has put @current_player in check" do
+      game.board = board
+      game.current_player = game.player1
+      expect(game.check?).to eq(true)
+    end
+
+  end
+
 end

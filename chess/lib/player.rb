@@ -9,7 +9,7 @@ class Player
     @name = name || GameIO.request_player_name(num, color)
   end
 
-  def take_turn(board, check=false)
+  def take_turn(board, check=false, king_safe_tiles=nil)
     move = []
 
     GameIO.give_output("It's #{@name}'s (#{@color}) turn.\nChoose a valid piece and destination separated by a comma (ex: a2,a3): ", "print")
@@ -17,7 +17,6 @@ class Player
     # if move
     target = move[0]
     destination = move[1]
-    p move
     case
     when !board.valid_tile?(target)
       GameIO.give_output("Sorry, that coordinate is not on the board.")

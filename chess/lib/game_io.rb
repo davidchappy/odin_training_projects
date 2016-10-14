@@ -23,7 +23,7 @@ class GameIO
     self.give_output(board_output)
   end
 
-  def self.print_captured(captured)
+  def self.print_captured(captured, stdout=$stdout)
     if captured.length >= 1 
       output = ["Captured pieces: "]
       if captured.select{|p| p if p.color == "white"}.length >= 1
@@ -38,15 +38,29 @@ class GameIO
         black.each {|p| output[-1] += p.name + ", " unless p.nil?}
         output[-1] = output[-1].chomp(", ")
       end
-      self.give_output(output)
+      self.give_output(output, "puts", stdout)
       output.join("\n")
     end
+  end
+
+  def self.print_check(current_player, king_safe_tiles, stdout=$stdout)
+    output = ["#{current_player.name} is in check!"]
+    output << "Safe moves: "
+    king_safe_tiles.each {|tile| output[1] += tile.to_s + ", " unless tile.nil? } 
+    output[1] = output[1].chomp(", ")
+    self.give_output(output, "puts", stdout)
+    output
   end
 
   def self.print_turn_update(player, move, board, check=false)
     piece = board.find_piece(move[0])
     destination = move[1]
     output = "#{player.name} moved #{piece.name} to #{destination}"
+    self.give_output(output)
+  end
+
+  def self.print_finish(winner)
+    output = "Game over! #{winner} wins!"
     self.give_output(output)
   end
 
