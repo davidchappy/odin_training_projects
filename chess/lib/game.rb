@@ -37,7 +37,6 @@ class Game
       GameIO.print_captured(@board.captured)
       @current_player = switch_players(@current_player)
     end
-    # GameIO.print_board(@board.board)
   end
 
   def set_starting_player
