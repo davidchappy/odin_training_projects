@@ -39,9 +39,6 @@ class Player
       GameIO.give_output("Sorry, that's not a possible move for that piece.")
       take_turn(board)
     else
-      # update piece's position variable to match new location
-      piece = board.positions[target.to_sym]
-      piece.position = destination
       # if enemy is targetted, add to board.captured variable
       if board.is_enemy?(destination, self.color)
         board.captured << board.positions[destination.to_sym]

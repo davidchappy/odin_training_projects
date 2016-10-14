@@ -15,6 +15,19 @@ class Board
     @@tiles
   end
 
+  def inspect
+    output = ""
+    @positions.each do |position, value|
+      if is_piece?(position.to_s)
+        output += "#{value.position}: #{value.color} #{value.name}\n"
+      else
+        next
+        # output += position.to_s + ": blank" + "\n" 
+      end
+    end
+    puts output
+  end
+
   def generate_tiles      
     positions = {}
     8.downto(1).each do |number|
@@ -77,6 +90,7 @@ class Board
   end
 
   def update_board(move)
+    # update piece's position variable to match new location
     start_position = move[0]
     piece = find_piece(start_position)
     destination = move[1]

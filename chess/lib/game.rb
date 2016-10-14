@@ -23,6 +23,7 @@ class Game
   def process_turns
     GameIO.print_board(@board.board)
     until check_mate?
+      p @board
       if check?
         GameIO.print_check(@current_player, @board.king_safe_tiles(@current_player, switch_players))
         move = @current_player.take_turn(@board, true, @board.king_safe_tiles(@current_player, switch_players))
