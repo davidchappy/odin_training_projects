@@ -12,20 +12,22 @@ class Player
   def take_turn(board, check=false, king_safe_tiles=nil)
     move = []
 
-    if board.castleable(self) != false
+    # check for casteable
+    castleable = board.castleable(self)
+    if castleable != false
       GameIO.give_output("You can castle your king. Do you want to? (y/N)", "print") 
       answer = GameIO.get_input.downcase
       if answer == "y"
-        if board.castleable(self).all?{|i| i == true }
+        if castleable.all?{|i| i == true }
           GameIO.give_output("You can castle in either direction. Type 'l' for left or 'r' for right.")
           castle_input = GameIO.get_input.downcase
           until castle_input =~ /^[lr]$/
             GameIO.give_output("Please type a direction (l/r).")
             castle_input = GameIO.get_input.downcase
           end
-          @board.castle(self, castle_input)
-        else 
-          @board.castle(self)
+          return @board.castle(self, castle_input)
+        else  
+          return @board.castle(self, castleable)
         end
       else
         GameIO.give_output("It's #{@name}'s (#{@color}) turn.\nChoose a valid piece and destination separated by a comma (ex: a2,a3): ", "print")  

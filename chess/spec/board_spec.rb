@@ -275,9 +275,39 @@ describe Board do
 
   describe "#castle" do
 
-    it "castles king in chosen or available direction and moves rook to king's position" do
+    let(:player) do
+      game.current_player = game.player1
+    end
+    let(:castle) { board.castle(player, [true, false]) }
 
+    it "moves the king but returns move coordinates for the rook" do
+      board.positions[:b1] = $blank
+      board.positions[:c1] = $blank
+      board.positions[:d1] = $blank
+      castle
+      expect(board.positions[:c1]).to be_a(Piece::King)
+      expect(castle).to eq(["a1","d1"])
+    end
 
+    it "castles king in chosen direction if both sides are available" do
+      board.positions[:b1] = $blank
+      board.positions[:c1] = $blank
+      board.positions[:d1] = $blank
+      board.positions[:f1] = $blank
+      board.positions[:g1] = $blank
+      expect(board.castleable(player)[0]).to eq(true)
+      expect(board.castleable(player)[1]).to eq(true)
+      expect(board.castle(player, "l")).to eq(["a1","d1"])
+      expect(board.castle(player, "r")).to eq(["h1","f1"])
+    end
+
+    it "marks the king and rook as having moved" do
+      move = castle
+      board.update_board(move)
+      expect(board.positions[:c1].has_moved).to eq(true)
+      expect(board.positions[:c1]).to be_a(Piece::King)
+      expect(board.positions[:d1].has_moved).to eq(true)
+      expect(board.positions[:d1]).to be_a(Piece::Rook)
     end
 
   end

@@ -96,6 +96,7 @@ class Board
     # update piece's position variable to match new location
     start_position = move[0]
     piece = find_piece(start_position)
+    piece.has_moved = true if piece.is_a?(Piece::King) || piece.is_a?(Piece::Rook)
     destination = move[1]
     piece.position = destination
     @positions[start_position.to_sym] = $blank
@@ -242,7 +243,7 @@ class Board
 
   # figures out if player can castle their king, returning false or array of true/false for l/r
   def castleable(player)
-    casteable = []
+    castleable = []
     pieces = get_player_pieces(player)
     king = pieces.select{ |p| p if p.name == "king" }[0]
     rooks = pieces.select{ |p| p if p.name == "rook" }
@@ -263,17 +264,73 @@ class Board
       return false
     when left_side.any?{ |t| @positions[t] != $blank } && right_side.any?{ |t| @positions[t] != $blank }
       return false
-    when left_side.all?{ |t| @positions[t] == $blank } && left_rook.has_moved == false
-      casteable[0] = true
-      casteable[1] = false 
-    when right_side.all?{ |t| @positions[t] == $blank } && right_rook.has_moved == false
-      casteable[0] ||= false 
-      casteable[1] = true 
+    when rooks.length == 1
+      if left_side.all?{ |t| @positions[t] == $blank } && left_rook.has_moved == false
+        puts "got to left side and rook has moved false"
+        castleable[0] = true
+        castleable[1] = false 
+      end
+      if right_side.all?{ |t| @positions[t] == $blank } && right_rook.has_moved == false
+        puts "got to right side"
+        castleable[0] ||= false 
+        castleable[1] = true 
+      end
+    when rooks.length == 2
+      castleable[0] = left_side.all?{ |t| @positions[t] == $blank } ? true : false
+      castleable[1] = right_side.all?{ |t| @positions[t] == $blank } ? true : false
     else
       return false
     end
 
-    casteable
+    if castleable == [] || castleable.nil?
+      return false
+    else
+      return castleable
+    end
+  end
+
+  def castle(player, input)
+    move = []
+    castle_left = (input.is_a?(Array) && input[0] == true) || input == "l" ? true : false
+    castle_right = (input.is_a?(Array) && input[1] == true) || input == "r" ? true : false
+    # p castle_left
+    # p castle_right
+    pieces = get_player_pieces(player)
+
+    # determine player color, move king and prep returned move with rook coordinates
+    case 
+    when player.color == "white"
+      king = find_piece("e1")
+      if castle_left
+        move[0] = "a1"
+        move[1] = "d1" 
+        king.position = "c1"
+        king.has_moved = true
+        @positions[:c1] = king
+      elsif castle_right
+        move[0] = "h1"
+        move[1] = "f1" 
+        king.position = "g1"
+        king.has_moved = true
+        @positions[:g1] = king
+      end
+    when player.color == "black" 
+      king = find_piece("e8")
+      if castle_left
+        move[0] = "a8"
+        move[1] = "d8" 
+        king.position = "c8"
+        king.has_moved = true
+        @positions[:c8] = king
+      elsif castle_right
+        move[0] = "h8"
+        move[1] = "f8" 
+        king.position = "g8"
+        king.has_moved = true
+        @positions[:g8] = king
+      end
+    end
+    move
   end
 
 end
