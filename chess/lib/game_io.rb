@@ -77,4 +77,44 @@ class GameIO
     GameIO.give_output(output)
   end
 
+  def self.welcome
+   GameIO.give_output("Welcome to Chess! This is a 2-player game and the starting player is chosen randomly.")    
+  end
+
+  def self.choose_save(saves)
+    if saves == nil || saves == []
+      GameIO.give_output("You have no saved games.\nRestarting.") 
+      Game.start
+    else
+      GameIO.give_output("Your saves:")
+      saves.each do |save|
+        GameIO.give_output "(" + save[:id].to_s + ")" + " - " + Time.at(save[:time]).strftime("%Y-%m-%d %H:%M:%S")
+      end
+    end
+    GameIO.give_output("Type the number of the game you'd like to load: ", "print")
+    id = GameIO.get_input
+    while id.match(/ˆ[0-9]+$/) == false
+      GameIO.give_output("Please type a number: ", "print")
+      id = GameIO.get_input
+    end
+    id
+  end
+
+  def self.load?
+    GameIO.give_output("Would you like to (l)oad a saved game or start a (N)ew game?", "print")
+    choice = GameIO.get_input.downcase
+    return true if choice == "l"
+    false
+  end
+
+  def self.save?
+    GameIO.give_output("Want to save your game? (y/N) ", "print")
+    response = GameIO.get_input.downcase
+    if response == "y"
+      GameIO.give_output("Game saved.")
+      return true 
+    end
+    false
+  end
+
 end

@@ -6,21 +6,39 @@ class Game
   attr_accessor :current_player, :board
 
   def self.start
-    @game = Game.new
-    @game.process_turns
+    GameIO.welcome
+    if GameIO.load?
+      game = Game.new(true)
+    else
+      game = Game.new
+    end
+    game.process_turns
   end
 
-  def initialize
-    @player1 = Player.new(1, "white", "David")
-    @player2 = Player.new(2, "black", "Kristin")
-    @current_player = set_starting_player
-    @board = Board.new
+  def initialize(load=false)
+    @saver = Saver.new(self)
+    if load
+      save = GameIO.choose_save(@saver.saves)
+      loaded_game = @saver.load(save)
+      state = loaded_game[:state]
+      @player1 = state[:player1]
+      @player2 = state[:player2]
+      @current_player = state[:current_player]
+      @board = Board.new
+      @board.positions = state[:board_positions]
+      @board.board = state[:board_board]
+      @board.captured = state[:board_captured]
+    else  
+      @player1 = Player.new(1, "white", "David")
+      @player2 = Player.new(2, "black", "Kristin")
+      @current_player = set_starting_player
+      @board = Board.new
+    end
   end
 
   def process_turns
     GameIO.print_board(@board.board)
     loop do
-      # p @board
       if check?
         GameIO.print_check(@current_player, @board.king_safe_tiles(@current_player, switch_players))
         move = @current_player.take_turn(@board, true, @board.king_safe_tiles(@current_player, switch_players))
@@ -39,6 +57,7 @@ class Game
       GameIO.print_board(@board.board)
       GameIO.print_captured(@board.captured)
       @current_player = switch_players(@current_player)
+      @saver.save if GameIO.save?
     end
   end
 

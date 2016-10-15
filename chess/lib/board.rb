@@ -293,8 +293,6 @@ class Board
     move = []
     castle_left = (input.is_a?(Array) && input[0] == true) || input == "l" ? true : false
     castle_right = (input.is_a?(Array) && input[1] == true) || input == "r" ? true : false
-    # p castle_left
-    # p castle_right
     pieces = get_player_pieces(player)
 
     # determine player color, move king and prep returned move with rook coordinates

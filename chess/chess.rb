@@ -1,4 +1,6 @@
 # -*- encoding : utf-8 -*-
+require 'yaml'
+require 'time'
 require './lib/chess_helpers.rb'
 require './lib/game.rb'
 require './lib/saver.rb'
@@ -9,6 +11,8 @@ require './lib/piece.rb'
 require 'colorize'
 
 $blank = " "
+$save_path = "saves/"
+Dir.mkdir($save_path) unless Dir.exists?($save_path)
 
 if !ARGV[0].nil? && (ARGV[0].downcase == "start" || ARGV[0].downcase == "s")
   Game.start
