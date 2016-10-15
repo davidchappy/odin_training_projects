@@ -28,8 +28,8 @@ class Game
         move = @current_player.take_turn(@board)
       end
       GameIO.print_turn_update(@current_player, move, @board)
-      if en_passant?(@board.positions[move.to_sym])
-        process_en_passant(move)
+      if @board.en_passant?(@board.positions[move[1].to_sym])
+        @board.process_en_passant(move)
       end
       @board.update_board(move)
       if check_mate?
