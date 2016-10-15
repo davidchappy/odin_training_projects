@@ -77,7 +77,6 @@ describe Board do
 
     it "returns an array of board output characters" do
       expect(board_tiles).to be_a(Array)
-      # header row (1) + top/bottom borders(2) + rows (8) + row dividers (7) = 18
       expect(board_tiles.length).to eq(18)
     end
 
@@ -226,6 +225,59 @@ describe Board do
       expect(board.positions[:g5]).to eq($blank)
       expect(board.captured[0].position).to eq("")
       expect(board.captured.length).to eq(1)
+    end
+
+  end
+
+  describe "#casteable" do
+
+    let(:king) { Piece::King.new("white", "e1") }
+    let(:player) do
+      game.current_player = game.player1
+    end
+
+    it "returns false if king cannot castle" do
+      expect(board.castleable(player)).to eq(false) 
+    end
+
+    it "returns array with first member true if king can castle on left side" do
+      board.positions[:b1] = $blank
+      board.positions[:c1] = $blank
+      board.positions[:d1] = $blank
+      expect(board.castleable(player)).to be_a(Array)
+      expect(board.castleable(player)[0]).to eq(true)
+      expect(board.castleable(player)[1]).to eq(false)
+    end
+
+    it "returns array with second member true if king can castle on right side" do
+      board.positions[:f1] = $blank
+      board.positions[:g1] = $blank
+      expect(board.castleable(player)).to be_a(Array)
+      expect(board.castleable(player)[0]).to eq(false)
+      expect(board.castleable(player)[1]).to eq(true)
+    end
+
+    context "when a king or rook has moved" do
+
+      it "returns false" do
+        rook = Piece::Rook.new("white", "a1")
+        rook.has_moved = true
+        board.positions[:a1] = rook
+        board.positions[:b1] = $blank
+        board.positions[:c1] = $blank
+        board.positions[:d1] = $blank
+        expect(board.castleable(player)).to_not be_a(Array)
+        expect(board.castleable(player)).to eq(false)
+      end
+    end
+
+  end
+
+  describe "#castle" do
+
+    it "castles king in chosen or available direction and moves rook to king's position" do
+
+
     end
 
   end

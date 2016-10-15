@@ -19,10 +19,13 @@ class Board
     output = ""
     @positions.each do |position, value|
       if is_piece?(position.to_s)
-        output += "#{value.position}: #{value.color} #{value.name}\n"
+        if value.respond_to?(:has_moved)
+          moved = "Moved: " + value.has_moved.to_s
+        end
+        output += "#{value.position}: #{value.color} #{value.name} #{moved}\n"
       else
-        next
-        # output += position.to_s + ": blank" + "\n" 
+        # next
+        output += position.to_s + ": blank" + "\n" 
       end
     end
     puts output
@@ -237,4 +240,42 @@ class Board
     false
   end
 
+  # figures out if player can castle their king, returning false or array of true/false for l/r
+  def castleable(player)
+    casteable = []
+    pieces = get_player_pieces(player)
+    king = pieces.select{ |p| p if p.name == "king" }[0]
+    rooks = pieces.select{ |p| p if p.name == "rook" }
+    left_rook = rooks.select{ |r| r if r.position == "a8" || r.position == "a1" }[0]
+    right_rook = rooks.select{ |r| r if r.position == "h8" || r.position == "h1" }[0]
+    rooks.each { |rook| rooks.delete(rook) if rook.has_moved }
+
+    if player.color == "white"
+      left_side = @positions.keys.select{ |t| @positions[t] if t == :d1 || t == :c1 || t == :b1 }
+      right_side = @positions.keys.select{ |t| @positions[t] if t == :f1 || t == :g1 }     
+    else 
+      left_side = @positions.keys.select{ |t| @positions[t] if t == :d8 || t == :c8 || t == :b8 }
+      right_side = @positions.keys.select{ |t| @positions[t] if t == :f8 || t == :g8 }  
+    end
+
+    case
+    when king.has_moved || rooks.length == 0
+      return false
+    when left_side.any?{ |t| @positions[t] != $blank } && right_side.any?{ |t| @positions[t] != $blank }
+      return false
+    when left_side.all?{ |t| @positions[t] == $blank } && left_rook.has_moved == false
+      casteable[0] = true
+      casteable[1] = false 
+    when right_side.all?{ |t| @positions[t] == $blank } && right_rook.has_moved == false
+      casteable[0] ||= false 
+      casteable[1] = true 
+    else
+      return false
+    end
+
+    casteable
+  end
+
 end
+
+

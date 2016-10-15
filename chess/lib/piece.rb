@@ -188,10 +188,13 @@ class Piece
 
   class Rook < Piece
 
+    attr_accessor :has_moved
+
     def initialize(color, position="")
       super
       @name = "rook"
       @icon = get_icon(@color, @name)
+      @has_moved ||= false
     end
 
     def moves(board)
@@ -251,10 +254,13 @@ class Piece
 
   class King < Piece
 
+    attr_accessor :has_moved
+
     def initialize(color, position="")
       super
       @name = "king"
       @icon = get_icon(@color, @name)
+      @has_moved ||= false
     end
 
     def moves(board)
