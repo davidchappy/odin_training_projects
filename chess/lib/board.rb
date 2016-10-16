@@ -309,12 +309,14 @@ class Board
         move[1] = "d1" 
         king.position = "c1"
         king.has_moved = true
+        @positions[:e1] = $blank
         @positions[:c1] = king
       elsif castle_right
         move[0] = "h1"
         move[1] = "f1" 
         king.position = "g1"
         king.has_moved = true
+        @positions[:e1] = $blank   
         @positions[:g1] = king
       end
     when player.color == "black" 
@@ -324,12 +326,14 @@ class Board
         move[1] = "d8" 
         king.position = "c8"
         king.has_moved = true
+        @positions[:e8] = $blank   
         @positions[:c8] = king
       elsif castle_right
         move[0] = "h8"
         move[1] = "f8" 
         king.position = "g8"
         king.has_moved = true
+        @positions[:e8] = $blank   
         @positions[:g8] = king
       end
     end
