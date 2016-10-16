@@ -11,12 +11,13 @@ class Saver
   end
 
   def save
+    get_saves
     @current_save = {
       id: generate_id,
       time: Time.now.getutc.to_i,
       state: get_game_state
     }
-    @file = File.open(($save_path + @current_save[:time].to_s + "_chess_save.json"), "w") do |f|
+    @file = File.open(($save_path + @current_save[:time].to_s + "_chess_save.yaml"), "w") do |f|
       f.write(YAML::dump(@current_save))
     end
   end
@@ -40,10 +41,17 @@ class Saver
 
   def generate_id
     id = 0
+    ids = []
     @saves.each do |save|
-      id = save[:id] unless id > save[:id]
+      ids << save[:id]
     end
-    id + 1
+    p ids
+    if ids.nil? || ids.empty?
+      id = 1
+    else
+      id = ids.max + 1
+    end
+    id
   end
 
   def get_saves
