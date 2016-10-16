@@ -157,7 +157,6 @@ class Piece
         offsets << -9 if !front_left.nil? && board.is_enemy?(front_left, "white")
         offsets << -7 if !front_right.nil? && board.is_enemy?(front_right, "white")
         if board.en_passant?(self)
-          GameIO.give_output("Notice: #{@color} can perform en_passant.")
           offsets << -9 if !left.nil? && board.is_enemy?(left, "white")
           offsets << -7 if !right.nil? && board.is_enemy?(right, "white")
         end
@@ -173,7 +172,6 @@ class Piece
         offsets << 9 if !front_left.nil? && board.is_enemy?(front_left, "black")
         offsets << 7 if !front_right.nil? && board.is_enemy?(front_right, "black")
         if board.en_passant?(self)
-          GameIO.give_output("Notice: #{@color} can perform en_passant.")
           offsets << 7 if !left.nil? && board.is_enemy?(left, "black")
           offsets << 9 if !right.nil? && board.is_enemy?(right, "black")
         end

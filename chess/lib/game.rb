@@ -46,7 +46,7 @@ class Game
         move = @current_player.take_turn(@board)
       end
       GameIO.print_turn_update(@current_player, move, @board)
-      if @board.en_passant?(@board.positions[move[1].to_sym])
+      if @board.en_passant?(@board.positions[move[0].to_sym])
         @board.process_en_passant(move)
       end
       @board.update_board(move)

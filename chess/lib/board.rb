@@ -211,9 +211,14 @@ class Board
     row = piece.position[1]
     right = "#{(col_as_num+1).chr}#{row}"
     left = "#{(col_as_num-1).chr}#{row}"
+    p right
+    p left
+    p destination
     if piece.color == "white"
       upper_left = "#{(col_as_num-1).chr}#{(row.to_i + 1).to_s}"
       upper_right = "#{(col_as_num+1).chr}#{(row.to_i + 1).to_s}"
+      p upper_left
+      p upper_right
       if destination == upper_left 
         @captured << @positions[left.to_sym]
         @positions[left.to_sym].position = ""
