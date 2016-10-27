@@ -1,0 +1,30 @@
+<div class="content login col-md-8 col-md-offset-2">
+  <div class="content-header">
+    <h1>Log in</h1>
+  </div>
+
+  <div class="login-form">
+    <%= form_for(:session, url: login_path) do |f| %>
+      <ul>
+        <li>   
+          <%= f.label :email %>
+          <%= f.email_field :email %>
+        </li>
+        <li>
+          <%= f.label :password %> 
+          <%= f.password_field :password %>
+        </li>
+        <li>
+          <%= f.submit "Log in" %>
+        </li>
+        <li class="credentials">  
+          <p>Credentials:</p>
+          <p><strong>Email:</strong> members@example.com</p>
+          <p><strong>Password:</strong> members_only</p>
+        </li>
+      </ul>
+    <% end %>
+  </div>
+
+
+</div>

@@ -1,0 +1,21 @@
+<div class="content col-md-8 col-md-offset-2">
+
+  <div class="content-header">
+    <h1>All Posts</h1>
+  </div>
+
+  <div class="posts">
+    <% @posts.each do |post| %>
+      <div class="post">
+        <h4><%= post.title %></h4>
+        <% if logged_in? %>
+          <p class="author-name">By: <strong><%= author(post) %></strong></p>
+        <% end %>
+        <p><%= post.content %></p>
+        <hr>
+      </div>
+    <% end %> 
+  </div>
+
+</div>
+

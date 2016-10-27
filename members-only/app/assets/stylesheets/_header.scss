@@ -1,0 +1,21 @@
+.navbar {
+  background: $primary;
+  @media screen and (min-width: 768px) {
+    padding: 0 30px;
+  }
+  .navbar-brand {
+    font-family: "Gloria Hallelujah";
+    color: $brand;
+    font-size: 2em;
+    &:hover {
+      text-shadow: 0 1px 5px $off-white;
+    }
+  }
+  .icon-bar {
+    background: $off-white;
+  } 
+  a {
+    color: darken($primary, 25%);
+  }
+}
+

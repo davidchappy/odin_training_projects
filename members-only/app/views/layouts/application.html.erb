@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>MembersOnly</title>
+    <title>Members Only</title>
     <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <%= yield %>
+    <%= render '/layouts/header' %>
+    <div class="container">
+      <% flash.each do |type, message| %>
+        <strong><%= content_tag :div, message, class: "alert alert-#{type}" %></strong>
+      <% end %>
+        <%= yield %>
+    </div>
+
   </body>
 </html>

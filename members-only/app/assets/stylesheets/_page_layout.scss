@@ -1,0 +1,18 @@
+.content {
+  border-radius: 15px;
+  border: 2px solid $primary;
+  padding: 0;
+}
+
+.content-header {
+  width: 100%;
+  background: $primary;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  padding: 10px 0;
+  h1 {
+    text-align: center;
+    color: $off-white;
+    margin: 0;
+  }
+}

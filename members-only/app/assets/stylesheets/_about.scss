@@ -1,0 +1,16 @@
+.about {
+  h1 {
+    padding: 10px 0;
+    text-align: center;
+    color: $primary;
+  }
+  p {
+    color: $brand;
+    font-size: 1.1em;
+    margin-bottom: 1rem;
+  }
+}
+
+.about-content {
+  padding: 2rem;
+}
