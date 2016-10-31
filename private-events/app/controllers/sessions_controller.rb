@@ -4,9 +4,14 @@ class SessionsController < ApplicationController
 
   def create
     @user = User.find_by(email: params[:session][:email])
-    session[:user_id] = @user.id
-    flash[:success] = "Logged in."
-    redirect_to user_path(@user)
+    if @user
+      session[:user_id] = @user.id
+      flash[:success] = "Logged in."
+      redirect_to user_path(@user)
+    else
+      flash.now[:danger] = "Couldn't find a user with that email."
+      render 'new'
+    end
   end
 
   def destroy
