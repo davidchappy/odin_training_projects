@@ -1,0 +1,43 @@
+<h1>All Events</h1>
+
+
+<% if Event.past.any? %>
+<h3>Past Events</h3>
+<ul>
+  <% Event.past.each do |event| %>
+    <li>
+      Event at <%= link_to event.location, event %>
+      On <%= event.date.to_formatted_s(:long) %> <br />
+      Created By <em><%= event.creator.name %></em>
+      <% if logged_in? %>
+        <% unless event.attendees.include?(current_user) %>
+          <%= link_to "Attend", attend_path(event), method: :post %>
+        <% else %>
+          You'll be attending this event.
+        <% end %>
+      <% end %>
+    </li> 
+  <% end %>
+</ul>
+<% end %>
+
+<br>
+<% if Event.upcoming.any? %>
+<h3>Upcoming Events</h3>
+<ul>
+  <% Event.upcoming.each do |event| %>
+    <li>
+      Event at <%= link_to event.location, event %>
+      On <%= event.date.to_formatted_s(:long) %> <br />
+      Created By <em><%= event.creator.name %></em>
+      <% if logged_in? %>
+        <% unless event.attendees.include?(current_user) %>
+          <%= link_to "Attend", attend_path(event), method: :post %>
+        <% else %>
+          You'll be attending this event.
+        <% end %>
+      <% end %>
+    </li> 
+  <% end %>
+</ul>
+<% end %>

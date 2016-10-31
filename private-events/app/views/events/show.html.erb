@@ -1,0 +1,12 @@
+<h1>Event at <%= @event.location %></h1>
+<p>Created by: <%= @event.creator.name %></p>
+<p>Description: <%= @event.description %></p>
+<p>When it's happening: <%= @event.date.to_formatted_s(:long) %></p>
+
+<% if @event.attendees %>
+  <ul>
+    <% @event.attendees.each do |attendee| %>
+      <li><%= attendee.name %> is going.</li>
+    <% end %>
+  </ul>
+<% end %>
