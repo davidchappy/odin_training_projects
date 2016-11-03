@@ -1,0 +1,14 @@
+<h1>All Kittens</h1>
+
+<% if @kittens %>
+<ul>
+  <% @kittens.each do |kitten| %>
+    <li>
+      <%= link_to kitten.name, kitten_path(kitten) %> 
+      (<%= link_to 'delete',  kitten_path(kitten), 
+                              method: :delete, 
+                              data: { confirm: 'Are you sure?'} %>)</li> 
+    <hr>
+  <% end %>
+</ul>
+<% end %>
