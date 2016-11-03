@@ -1,0 +1,18 @@
+<h1>Flickr API Demo</h1>
+
+<%= form_tag("/", method: "get") do %> 
+  <%= label_tag 'Paste in your Flickr ID: ' %>
+  <%= text_field_tag :flickr_id %>
+
+  <%= submit_tag 'Show my photos' %>
+<% end %> 
+
+<br>
+<hr>
+<br>
+
+<% if @photos %>
+  <% @photos.each do |photo| %>
+    <img src="<%= photo %>">
+  <% end %>
+<% end %>
