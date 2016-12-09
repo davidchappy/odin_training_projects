@@ -26,28 +26,34 @@ function getAJAX(url, containerID, callback, targetID) {
   };
 };
 
-function evalMovieQuery(json) {
-  var query = 'http://www.omdbapi.com/?';
-  // evaluate submitted title
-  var title = $("#movieChooser").children('#movieTitle').val();
-  if(title.length > 3) {
-    title = "s=" + title;
+function evalMovieQuery(formData) {
+  if(formData) {
+    var query = 'http://www.omdbapi.com/?';
+    // evaluate submitted title
+    var title = $('#movieTitle').val();
+    console.log(title);
+    if(title && title.length > 3) {
+      title = "s=" + title;
+    } else {
+      return false;
+    }
+    // evaluate optional submitted year
+    var year = $('#movieYear').val();
+    if(year) year = "\&y=" + year; 
+    // build and return query string
+    var page = "\&page=" + pageCount;
+    var type = "\&r=" + "json";
+    query += title + year + type + page;
+    console.log(query);
+    return query;
   } else {
     return false;
   }
-  // evaluate optional submitted year
-  var year = $("#movieChooser").children('#movieYear').val();
-  if(year) year = "\&y=" + year; 
-  // build and return query string
-  var page = "\&page=" + pageCount;
-  var type = "\&r=" + "json";
-  query += title + year + type + page;
-  return query;
 }
 
 function getMovies(json) {
   $.each(json.Search, function(index, val) {
-    var entry = $("<li class=movie></li>");
+    var entry = $("<li class='movie clearfix'></li>");
     entry.append('<span id="loading' + index + '">Loading...</span>');
 
     $.ajax({
@@ -58,6 +64,7 @@ function getMovies(json) {
         $("#target").append(entry);
       },
       success: function(json) {
+        console.log(json);
         entry.empty();
         // $("#loading" + index).remove();
         displayMovie(json, entry);
@@ -71,12 +78,26 @@ function getMovies(json) {
 }
 
 function displayMovie(movie, entry) {
+  console.log(movie.Poster);
   if(movie.Poster && movie.Poster != 'N/A') {
     entry.append("<img class='poster' src='" + movie.Poster + "'>");
+  } else  {
+    entry.append("<div class='filler'></div>")
   };
   entry.append("<h3>" + movie.Title + "</h3>");
-  entry.append("<p>Year: " + movie.Year + "</p>");
-  entry.append("<p>Summary: " + movie.Plot + "</p>");
+  var popularity;
+  if(movie.imdbRating < 4) {
+    popularity = 'unpopular';
+  } else if (movie.imdbRating >= 4 && movie.imdbRating < 8) {
+    popularity = 'ok';
+  } else {
+    popularity = 'popular';
+  }
+  entry.append("<p class='movie-year'>Year: " + movie.Year + " | " + "Rating: " + "<span class='" + popularity + "'>" + movie.imdbRating + "</span>" + "</p>");
+  entry.append("<h4>Plot Summary</h4>");
+  entry.append("<p class='plot'>" + movie.Plot + "</p>");
+  entry.append("<h4>Awards</h4>");
+  entry.append("<p class='awards'>" + movie.Awards + "</p>");
 }
 
 function listen() {
@@ -91,6 +112,7 @@ function listen() {
     } else {
       $("#target").append("Please type a valid title (3+ characters).").show();
     }
+    $('.year').hide();
     return false;
   });
 
@@ -108,6 +130,10 @@ function listen() {
         $("#target").append("Please type a valid title (3+ characters).").show();
       }
     }
+  });
+
+  $(document).on('keyup', '#movieTitle', function(event) {
+    $('.year').fadeIn();
   });
 }
 
