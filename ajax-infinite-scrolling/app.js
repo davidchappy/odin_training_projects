@@ -21,7 +21,7 @@ function getAJAX(url, containerID, callback, targetID) {
         console.log("There was an error");
         console.log(xhr);
         $("#" + containerID).html('<p class="error">Oops there was an error: ' + xhr.statusText + '</p>');
-      }    
+      }
     }); 
   };
 };
@@ -47,13 +47,20 @@ function evalMovieQuery(json) {
 
 function getMovies(json) {
   $.each(json.Search, function(index, val) {
+    var entry = $("<li class=movie></li>");
+    entry.append('<span id="loading' + index + '">Loading...</span>');
+
     $.ajax({
       url: 'http://www.omdbapi.com/?i=' + val.imdbID + "\&plot=short\&r=json",
       type: 'GET',
       dataType: 'json',
+      beforeSend: function() {
+        $("#target").append(entry);
+      },
       success: function(json) {
-        console.log(json);
-        displayMovie(json);
+        entry.empty();
+        // $("#loading" + index).remove();
+        displayMovie(json, entry);
       },
       error: function(xhr, error, status) {
         console.log(status);
@@ -63,36 +70,45 @@ function getMovies(json) {
   });
 }
 
-function displayMovie(movie) {
-  var entry = $("<li class=movie></li>");
+function displayMovie(movie, entry) {
   if(movie.Poster && movie.Poster != 'N/A') {
     entry.append("<img class='poster' src='" + movie.Poster + "'>");
   };
   entry.append("<h3>" + movie.Title + "</h3>");
   entry.append("<p>Year: " + movie.Year + "</p>");
-  // entry.append("<p>IMDB id: " + movie.imdbID + "</p>");
   entry.append("<p>Summary: " + movie.Plot + "</p>");
-  $("#target").append(entry);
 }
 
 function listen() {
+  var form = $("#movieChooser");
+
   $('body').on('click', '#loadMovies', function(event) {
     event.preventDefault();
-    console.log("searching");
     $("#target").empty();
-    var form = $("#movieChooser");
     var query = evalMovieQuery(form);
     if(query) {
       getAJAX(query, 'target', getMovies);
     } else {
       $("#target").append("Please type a valid title (3+ characters).").show();
     }
-    pageCount += 1;
     return false;
   });
 
-  
-
+  $(document).on('scroll', function(event) {  
+    var viewportHeight = $(window).height();
+    var docHeight = $(document).height();
+    var position = $(document).scrollTop();
+    if(position >= docHeight - viewportHeight - 700) {
+      console.log("Loading more results...");
+      pageCount +=1;
+      var query = evalMovieQuery(form);
+      if(query) {
+        getAJAX(query, 'target', getMovies);
+      } else {
+        $("#target").append("Please type a valid title (3+ characters).").show();
+      }
+    }
+  });
 }
 
 $(document).ready(function() {
