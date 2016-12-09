@@ -3,12 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title></title>
+  <title>Movie Viewer: Infinite Scrolling with AJAX</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <form action="" method="GET" id="movieChooser">
+    <label for="movieTitle">Movie Title</label>
+    <input type="text" name="movieTitle" id="movieTitle">
+
+    <label for="movieYear">Year (optional)</label>
+    <input type="text" id="movieYear" name="movieYear">
+
+    <input type="submit" value="Search" id="loadMovies">
+  </form>
+
+  <ul id="target">
+  </ul>
+
+<!-- 
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-3.1.1.min.js"></script>
+  <script>
+  if (typeof jQuery == 'undefined') {
+      document.write(unescape("%3Cscript src='/jquery.js' type='text/javascript'%3E%3C/script%3E"));
+  }
+  </script>
+ -->
+  <script src="jquery.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
