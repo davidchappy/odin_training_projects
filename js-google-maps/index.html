@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <link rel="stylesheet" href="">
+  
+  <style>
+    html,
+    body {
+      font-family: Helvetica, sans-serif;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      height: 100%;
+    }
+
+    #form {
+      padding: 20px;
+    }
+
+    input {
+      margin-right: 10px;
+    }
+
+    input[type="text"] {
+      width: 7em;
+    }
+
+    input.textarea {
+      width: 20em;
+    }
+
+    .instructions {
+      font-size: 0.9em;
+    }
+         
+  </style>
+
+</head>
+<body>
+  <div id="form">
+    <form action="">
+      <label for="lattitude">Lattitude: </label>
+      <input type="text" id="lattitude" name="lattitude">
+
+      <label for="longitude">Longitude: </label>
+      <input type="text" id="longitude" name="longitude">
+
+      <label for="message">Message: </label>
+      <input type="text" class="textarea" id="message" name="message">
+
+      <input type="submit" id="submit" value="Submit">
+    </form>
+    <p class="instructions">Submit a longitude, latittude, and optional message.</p>
+  </div>
+  <div id="map"></div>
+
+  <script>
+    // http://stackoverflow.com/questions/827368/using-the-get-parameter-of-a-url-in-javascript (Gatsbimantico)
+    Url = {
+      get get(){
+        var vars= {};
+        if(window.location.search.length!==0)
+            window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){
+                key=decodeURIComponent(key);
+                if(typeof vars[key]==="undefined") {vars[key]= decodeURIComponent(value);}
+                else {vars[key]= [].concat(vars[key], decodeURIComponent(value));}
+            });
+        return vars;
+      }
+    };
+
+    var map;
+    var lattitude = parseInt(Url.get.lattitude);
+    var longitude = parseInt(Url.get.longitude);
+    var message = Url.get.message || '';
+    message = message.replace("+", " ");
+
+    if(lattitude && longitude) {
+      var latLng = {lat: lattitude, lng: longitude};
+    } else {
+      var latLng = {lat: -23.6509, lng: -70.3975};
+    }
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: latLng,
+        zoom: 5
+      });
+
+      if(lattitude && longitude) {
+        var marker = new google.maps.Marker({
+          position: latLng,
+          map: map,
+          title: message
+        })
+
+        if(message && message != '') {
+          var infowindow = new google.maps.InfoWindow({
+            content: message
+          });
+
+          marker.addListener('click', function(){
+            infowindow.open(map, marker);
+          })
+        }  
+      }
+
+    }
+  </script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsMELM-navtJ6x7R28CMIoCJjeFRTlqPU&callback=initMap"
+    async defer></script>
+
+</body>
+</html>
