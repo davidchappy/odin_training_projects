@@ -1,0 +1,65 @@
+@import 'scss/reset';
+@import 'scss/variables';
+@import 'scss/mixins';
+
+body {
+  background: $background-gray;
+  position: relative;
+}
+
+.wrapper {
+  overflow: visible;
+  margin-top: 15px;
+  background: $white;
+
+}
+
+.fluid-container {
+  width: $container-width;
+  height: 100%;
+  
+  &::after {
+    @include clearfix;
+  }
+}
+
+.main-nav {
+  float: left;
+  width: 10%;
+  background: $background-gray;
+  
+  .logo-tab {
+    background: $white;
+    height:80px;
+    box-shadow: $tab-shadow;
+  }
+
+  .main-nav-links li {
+    height: 60px;
+    border-bottom: 1px solid $border-gray;
+  }
+}
+
+.sub-nav {
+  float: left;
+  background: $white;
+  width: 15%;
+  border-right: 1px solid gray;
+  border-left: 1px solid gray;
+  min-height: 100vh;
+}
+
+.posts-feed {
+  width: 75%;
+  float: left;
+  border-radius: 8px;
+}
+
+.sidebar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: $sidebar-width;
+  background: $background-gray;
+  min-height: 100vh; 
+}

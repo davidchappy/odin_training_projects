@@ -1,0 +1,13 @@
+// Colors
+
+$background-gray: #eee;
+$border-gray: #ccc;
+$white: #fff;
+
+// Effects
+$tab-shadow: 0 1px 1px 0 darken($background-gray, 7%);
+
+
+// Layout
+$sidebar-width: 440px;
+$container-width: calc(100vh - 440px);
