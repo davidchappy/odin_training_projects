@@ -6,8 +6,12 @@ $white: #fff;
 
 // Effects
 $tab-shadow: 0 1px 1px 0 darken($background-gray, 7%);
+$border-radius: .5em;
+
+// Borders/Backgrounds
+$border: 1px solid $border-gray;
 
 
 // Layout
-$sidebar-width: 440px;
-$container-width: calc(100vh - 440px);
+$sidebar-width: 480px;
+$container-width: 32%;
