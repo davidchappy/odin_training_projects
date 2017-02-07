@@ -152,6 +152,9 @@ header {
       @media screen and (min-width: 768px) {
         header .navigation .main-logo {
           height: 80px; } }
+      @media screen and (min-width: 1024px) {
+        header .navigation .main-logo {
+          transform: translateX(-108px); } }
     @media screen and (min-width: 768px) {
       header .navigation .main-nav {
         height: 32px;
@@ -216,21 +219,41 @@ header {
           height: 213.5px; } }
   @media screen and (min-width: 768px) {
     header .hero {
-      height: 400px; }
+      height: 400px;
+      position: relative; }
       header .hero article, header .hero div {
         display: inline-block; }
       header .hero .main-article {
-        width: 66.99%;
+        width: 66.66%;
         height: 100%; }
       header .hero .right-column {
         height: 100%;
-        width: 33%;
-        margin-left: -5px; }
+        width: 33.33%;
+        margin-left: -3px;
+        position: absolute;
+        right: 0; }
       header .hero .secondary-article {
         width: 100%;
-        height: 49.7%; }
-        header .hero .secondary-article:first-of-type {
-          margin-top: -3px; } }
+        height: 50%;
+        border-bottom: 10px solid #cdcdcd;
+        border-top: 10px solid #cdcdcd;
+        margin-bottom: -3px; } }
+  @media screen and (min-width: 1024px) {
+    header .hero {
+      height: 560px; }
+      header .hero .main-article {
+        position: relative; }
+      header .hero .main-logo-cover {
+        position: absolute;
+        display: block;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: url("img/cover-gradient.png") no-repeat;
+        background-position: top left;
+        background-size: cover;
+        opacity: 0.7; } }
 
 .main-content {
   min-width: 100px;
@@ -244,6 +267,9 @@ header {
     max-width: 728px;
     margin: 0 auto 2rem;
     background: #e6e6e6; }
+    @media screen and (min-width: 1024px) {
+      .main-content .main-ad {
+        height: 90px; } }
   .main-content .article-heading {
     color: #F42;
     cursor: pointer; }
@@ -259,46 +285,58 @@ header {
     min-height: 85px;
     width: 100%;
     position: relative; }
-  .main-content .latest-news .news-thumbnail img {
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 72px;
-    height: 72px;
-    border: 1px solid red;
-    float: left; }
-  .main-content .latest-news .news-thumbnail .news-thumbnail-text {
-    display: block;
-    position: absolute;
-    left: 80px;
-    top: 0;
-    background: gray;
-    height: 72px;
-    width: calc(100% - 80px);
-    float: left; }
-  @media screen and (min-width: 768px) {
-    .main-content .latest-news .news-thumbnail {
-      width: 32%;
-      display: inline-block;
+  .main-content .latest-news {
+    margin-bottom: 2rem; }
+    .main-content .latest-news .news-thumbnail img {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 72px;
+      height: 72px;
+      border: 1px solid red;
+      float: left; }
+    .main-content .latest-news .news-thumbnail .news-thumbnail-text {
+      display: block;
+      position: absolute;
+      left: 80px;
+      top: 0;
+      background: gray;
+      height: 72px;
+      width: calc(100% - 80px);
+      float: left; }
+    @media screen and (min-width: 768px) {
+      .main-content .latest-news .news-thumbnail {
+        width: 32%;
+        display: inline-block;
+        margin-bottom: 1rem; }
+        .main-content .latest-news .news-thumbnail img {
+          position: static;
+          display: block;
+          width: 100%; }
+        .main-content .latest-news .news-thumbnail .news-thumbnail-text {
+          width: 100%;
+          position: static;
+          display: block; } }
+    @media screen and (min-width: 1024px) {
+      .main-content .latest-news .news-thumbnail {
+        width: 24.5%; } }
+  .main-content .latest-funding {
+    margin-bottom: 2rem; }
+    .main-content .latest-funding .news-thumbnail img {
+      width: 95%;
+      height: 224px;
       margin-bottom: 1rem; }
-      .main-content .latest-news .news-thumbnail img {
-        position: static;
-        display: block;
-        width: 100%; }
-      .main-content .latest-news .news-thumbnail .news-thumbnail-text {
-        width: 100%;
-        position: static;
-        display: block; } }
-  .main-content .latest-funding .news-thumbnail img {
-    width: 95%;
-    height: 224px;
-    margin-bottom: 1rem; }
-  @media screen and (min-width: 768px) {
-    .main-content .latest-funding .news-thumbnail {
-      display: inline-block;
-      width: 32%;
-      padding: 0; } }
+    @media screen and (min-width: 768px) {
+      .main-content .latest-funding .news-thumbnail {
+        display: inline-block;
+        width: 32%;
+        padding: 0; } }
+    @media screen and (min-width: 1024px) {
+      .main-content .latest-funding .news-thumbnail {
+        display: inline-block;
+        width: 24.5%;
+        padding: 0; } }
   .main-content .categories .category {
     margin-bottom: 1.3rem; }
     .main-content .categories .category .article-heading {
@@ -314,6 +352,12 @@ header {
         display: inline-block;
         width: 48%;
         margin-right: 1rem; } }
+    @media screen and (min-width: 1024px) {
+      .main-content .categories .category {
+        display: inline-block;
+        width: 32%;
+        margin-right: 0.5rem;
+        margin-bottom: 2rem; } }
   .main-content .latest-deals {
     padding-bottom: 1rem; }
     .main-content .latest-deals .article-heading:after {
@@ -348,7 +392,20 @@ header {
     @media screen and (min-width: 768px) {
       .main-content .latest-deals .news-thumbnail {
         display: inline-block;
-        width: 32%; } }
+        width: 32%;
+        padding-right: 1rem;
+        margin-bottom: 1rem; }
+        .main-content .latest-deals .news-thumbnail img {
+          display: block;
+          width: 100%;
+          position: static;
+          margin-bottom: 0.5rem; }
+        .main-content .latest-deals .news-thumbnail .news-thumbnail-text {
+          display: block;
+          position: static; } }
+    @media screen and (min-width: 1024px) {
+      .main-content .latest-deals .news-thumbnail {
+        width: 24.5%; } }
 
 footer .quote {
   padding: 2rem;
@@ -367,6 +424,12 @@ footer .quote {
       display: block;
       margin-bottom: 0.5rem;
       font-style: normal; }
+    @media screen and (min-width: 768px) {
+      footer .quote blockquote {
+        font-size: 2em; } }
+    @media screen and (min-width: 1024px) {
+      footer .quote blockquote {
+        font-size: 3em; } }
   footer .quote .share-button {
     margin: 0 auto;
     border-radius: 3px;
@@ -375,13 +438,17 @@ footer .quote {
     width: 80px;
     background: #d9d9d9;
     border: 2px solid silver; }
+    @media screen and (min-width: 1024px) {
+      footer .quote .share-button {
+        height: 40px;
+        width: 100px; } }
 footer .main-footer {
   background: #131313;
   padding: 2rem 0 2rem 0; }
   footer .main-footer section {
     display: block;
     margin-bottom: 1rem;
-    height: 100px;
+    height: 300px;
     background: #e6e6e6;
     border: 10px solid #131313; }
     @media screen and (min-width: 480px) {
@@ -405,6 +472,13 @@ footer .main-footer {
       margin-right: 10px;
       background: #fff;
       border: 8px solid #676767; }
+    @media screen and (min-width: 768px) {
+      footer .main-footer .social {
+        width: 400px;
+        margin-bottom: 3rem; }
+        footer .main-footer .social li {
+          height: 50px;
+          width: 50px; } }
   footer .main-footer .main-nav-footer {
     text-align: center; }
     footer .main-footer .main-nav-footer li {
