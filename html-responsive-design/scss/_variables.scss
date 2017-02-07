@@ -2,6 +2,7 @@
 $black-background: #131313;
 $white: #fff;
 $orange: #F42;
+$border-gray: lighten(gray, 42%);
 
 // Breakpoints
 $small: 480px;
@@ -9,3 +10,6 @@ $medium: 768px;
 $medium-large: 833px;
 $large: 1024px;
 $max-width: 1192px;
+
+// Assets
+$assets-path: 'img/';
