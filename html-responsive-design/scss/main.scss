@@ -94,12 +94,18 @@ header {
     .main-nav {
       @media screen and (min-width: $medium) {
         height: 32px;
-        width: 100%;
+        width: calc(100% - 106px);
         background: $black-background;
         position: absolute;
         top: 0;
         left: 106px;
-      } 
+      }
+      
+      @media screen and (min-width: $large) {
+        width: 100%;
+        left: 0;
+      }
+
     }
 
     .sections-nav {

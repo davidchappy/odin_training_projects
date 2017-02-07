@@ -158,11 +158,15 @@ header {
     @media screen and (min-width: 768px) {
       header .navigation .main-nav {
         height: 32px;
-        width: 100%;
+        width: calc(100% - 106px);
         background: #131313;
         position: absolute;
         top: 0;
         left: 106px; } }
+    @media screen and (min-width: 1024px) {
+      header .navigation .main-nav {
+        width: 100%;
+        left: 0; } }
     @media screen and (min-width: 768px) {
       header .navigation .sections-nav {
         height: 48px;
